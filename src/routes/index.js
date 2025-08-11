@@ -11,57 +11,55 @@ const router = express.Router();
 
 // GET /
 router.get('/', (req, res) => {
- // const { result, output } = req.session.evalResult || {};
- // delete req.session.evalResult;
- res.render('index', {
+  res.render('index', {
     title: 'Online Lua Interpreter',
     subtitle: 'A difficult way to interact with Redis, more hash than Redis CLI, I assure, and let alone Redis Insight',
-    scripts: ['OLI:scripts:init.lua', 'OLI:scripts:redis.lua', 'OLI:scripts:test.lua'],
-    lastEdit: 'OLI:scripts:test.lua',
+    scripts: ['init.lua', 'do_this.lua', 'do_that.lua', 'do_nothing.lua'],
+    lastEdit: 'test.lua',
     keys: [],
     argv:[],
-    code: 'return redis.REDIS_VERSION',
-    output: 'Click on EVAL button to see the output'
+    code: '',
+    output: 'Click on Eval button to see the output'
   });
 });
 
-// POST /eval
+// POST /
 router.post('/', (req, res) => {
-  //const { code, keys, argv, scriptName } = req.body;
-  //const { result, output } = executeLua(code, keys, argv);
-  //req.session.evalResult = { result, output };
-  //res.redirect('/');
+  const { keys, argv, code  } = req.body;
   console.log('params =', req.body)
 
   res.render('index', {
     title: 'Online Lua Interpreter',
-    subtitle: 'Write and run Lua scripts interactively',
-    scripts: ['init.lua', 'redis.lua', 'test.lua'],
-    lastEdit: req.body?.scriptName || 'test.lua',
-    keys: [],
-    argv:[],
-    code: 'true',
-    output: 'Check the output'
+    subtitle: 'A difficult way to interact with Redis, more hash than Redis CLI, I assure, and let alone Redis Insight',
+    scripts: ['init.lua', 'do_this.lua', 'do_that.lua', 'do_nothing.lua'],
+    lastEdit: '',
+    keys,
+    argv,
+    code,
+    output: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore quibusdam esse modi odit, reiciendis nam fuga dolorem distinctio non labore atque? Eligendi beatae odio harum cumque excepturi asperiores quidem unde repudiandae corporis voluptatem id est architecto a, alias, sapiente praesentium quas doloribus illo voluptatum. Eligendi dignissimos fugiat quae corrupti voluptate voluptas dolor, debitis cupiditate autem natus, ullam provident sit accusantium dolore, sint atque. Blanditiis architecto asperiores quam perspiciatis? In eius incidunt ipsam, autem sunt ut consequuntur nemo quos eum voluptate, officiis a perferendis veniam, voluptatibus veritatis dolorum doloribus cupiditate explicabo dolor? Labore dolorum eos enim ducimus laborum tenetur eveniet facere.
+
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore quibusdam esse modi odit, reiciendis nam fuga dolorem distinctio non labore atque? Eligendi beatae odio harum cumque excepturi asperiores quidem unde repudiandae corporis voluptatem id est architecto a, alias, sapiente praesentium quas doloribus illo voluptatum. Eligendi dignissimos fugiat quae corrupti voluptate voluptas dolor, debitis cupiditate autem natus, ullam provident sit accusantium dolore, sint atque. Blanditiis architecto asperiores quam perspiciatis? In eius incidunt ipsam, autem sunt ut consequuntur nemo quos eum voluptate, officiis a perferendis veniam, voluptatibus veritatis dolorum doloribus cupiditate explicabo dolor? Labore dolorum eos enim ducimus laborum tenetur eveniet facere.
+    `
   })
 });
-
-router.post('/eval', (req, res) => {
-  res.render('index', {
-    title: 'Online Lua Interpreter',
-    subtitle: 'Write, Run, and Debug Lua Scripts in Redis',
-    scripts: [ "script1", "script2", "script3", "script4", "script5" ],
-    lastEdit: "script1"
-  });
-});
-
 
 export default router;
 
 /*
- {
-    title: 'Online Lua Inteerpreter',
-    subtitle: 'Write, Run, and Debug Lua Scripts with Redis',
-    scripts: [ "script1", "script2", "script3", "script4", "script5" ],
-    lastEdit: "script1"
- }
+  {
+      title: 'Online Lua Inteerpreter',
+      subtitle: 'Write, Run, and Debug Lua Scripts with Redis',
+      scripts: [ "script1", "script2", "script3", "script4", "script5" ],
+      lastEdit: "script1"
+  }
+  {
+      title: 'Online Lua Interpreter',
+      subtitle: 'A difficult way to interact with Redis, more hash than Redis CLI, I assure, and let alone Redis Insight',
+      scripts: ['init.lua', 'do_this.lua', 'do_that.lua', 'do_nothing.lua'],
+      lastEdit: '',
+      keys: [],
+      argv:[],
+      code: 'return redis.REDIS_VERSION',
+      output: 'Click on Run button to see the output'
+  }
 */
