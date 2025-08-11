@@ -71,34 +71,34 @@
             <option value="<%= script %>" <%= script === lastEdit ? 'selected' : '' %>><%= script %></option>
           <% }) %>
         </select>
+
         <input type="text" name="scriptName" id="scriptName" value="<%= lastEdit %>" placeholder="Script Name" class="border rounded px-2 py-1 flex-grow text-sm" />
-        <button type="submit" formaction="/load" class="px-3 py-1 bg-gray-300 rounded text-sm hover:bg-gray-400">Load</button>
-        <button type="submit" formaction="/save" class="px-3 py-1 bg-green-500 text-white rounded text-sm hover:bg-green-600">Save</button>
-        <button type="submit" formaction="/delete" class="px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600">Del</button>
+
+        <button type="button" id="loadBtn" class="px-3 py-1 bg-gray-300 rounded text-sm hover:bg-gray-400">Load</button>
+        <button type="button" id="saveBtn" class="px-3 py-1 bg-green-500 text-white rounded text-sm hover:bg-green-600">Save</button>
+        <button type="button" id="delBtn" class="px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600">Del</button>
       </div>
 
     <!-- Output Section -->
     <!-- Full-page container -->
     <div class="h-screen flex flex-col">
 
-    <!-- Output section grows with content -->
-    <div class="flex flex-col p-1 space-y-2">
-      <!-- Output Label -->
-      <h2 class="text-sm font-semibold">Output:</h2>
+      <!-- Output section grows with content -->
+      <div class="flex flex-col p-1 space-y-2">
+        <!-- Output Label -->
+        <h2 class="text-sm font-semibold">Output:</h2>
 
-      <!-- Expanding Output Block -->
-      <pre class="bg-white p-3 border rounded font-mono text-sm text-left whitespace-pre-wrap w-full">
-        <%= output %>
-      </pre>
+        <!-- Expanding Output Block -->
+        <pre id="output" class="bg-white p-3 border rounded font-mono text-sm text-left whitespace-pre-wrap w-full">
+          <%= output %>
+        </pre>
+      </div>
     </div>
-
-
-  </div>
 
   </main>
 
-  <!-- Drag Script + Tab Support -->
   <script>
+    // Drag Script + Tab Support
     const divider = document.getElementById('verticalDivider');
     const editorPanel = document.getElementById('editorPanel');
     const outputPanel = document.getElementById('outputPanel');
@@ -133,7 +133,7 @@
       }
     });
 
-    // 
+    // Handle dropdown change 
     document.addEventListener('DOMContentLoaded', () => {
     const dropdown = document.getElementById('scriptSelect');
     const textbox = document.getElementById('scriptName');
@@ -144,6 +144,94 @@
       });
     } else {
       console.warn('Dropdown or textbox not found');
+    }
+  });
+
+  // Handle load script 
+  document.addEventListener('DOMContentLoaded', () => {
+    const loadBtn = document.getElementById('loadBtn');
+    const scriptNameInput = document.getElementById('scriptName');
+    const editor = document.getElementById('code'); // adjust if using CodeMirror etc.
+    const output = document.getElementById('output');
+
+    loadBtn.addEventListener('click', async () => {
+      const scriptName = scriptNameInput.value.trim();
+      if (!scriptName) return alert('Script name is empty');
+
+      try {
+        const res = await fetch(`/api/v1/load?name=${encodeURIComponent(scriptName)}`);
+        const result = await res.json();
+
+        if (result.success) {
+          editor.value = result.code; // for <textarea>          
+          output.textContent = result.message;
+        } else {
+          alert(result.message || 'Failed to load script');
+        }
+      } catch (err) {
+        console.error('Load error:', err);
+        alert('Error loading script');
+      }
+    });
+  });
+
+  // Handle save script 
+  document.addEventListener('DOMContentLoaded', () => {
+  const saveBtn = document.getElementById('saveBtn');
+  const scriptNameInput = document.getElementById('scriptName');
+  const editor = document.getElementById('code');
+  const output = document.getElementById('output');
+
+  saveBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+
+    const scriptName = scriptNameInput.value.trim();
+    const code = editor.value.trim();
+
+    if (!scriptName || !code) {
+      output.textContent = 'Script name and/or code must not be empty';
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/v1/save', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: scriptName, code })
+      });
+
+      const result = await res.json();
+      output.textContent = result.message || 'Save response received';
+      } catch (err) {
+        console.error('Save error:', err);
+        output.textContent = 'Error saving script';
+      }
+    });
+  });
+
+  // Handle delete script 
+  deleteBtn.addEventListener('click', async (e) => {
+  e.preventDefault();
+
+  const scriptName = scriptNameInput.value.trim();
+  if (!scriptName) {
+    output.textContent = 'Script name must not be empty';
+    return;
+  }
+
+  const confirmed = confirm(`Are you sure you want to delete "${scriptName}"?`);
+  if (!confirmed) return;
+
+  try {
+    const res = await fetch(`/api/v1/delete?name=${encodeURIComponent(scriptName)}`, {
+      method: 'DELETE'
+    });
+
+    const result = await res.json();
+    output.textContent = result.message || 'Delete response received';
+  } catch (err) {
+      console.error('Delete error:', err);
+      output.textContent = 'Error deleting script';
     }
   });
 
