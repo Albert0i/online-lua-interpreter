@@ -76,7 +76,7 @@
 
         <button type="button" id="loadBtn" class="px-3 py-1 bg-gray-300 rounded text-sm hover:bg-gray-400">Load</button>
         <button type="button" id="saveBtn" class="px-3 py-1 bg-green-500 text-white rounded text-sm hover:bg-green-600">Save</button>
-        <button type="button" id="delBtn" class="px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600">Del</button>
+        <button type="button" id="deleteBtn" class="px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600">Del</button>
       </div>
 
     <!-- Output Section -->
@@ -211,7 +211,10 @@
 
   // Handle delete script 
   deleteBtn.addEventListener('click', async (e) => {
-  e.preventDefault();
+  //e.preventDefault();
+  const scriptNameInput = document.getElementById('scriptName');
+  const editor = document.getElementById('code');
+  const output = document.getElementById('output');
 
   const scriptName = scriptNameInput.value.trim();
   if (!scriptName) {
