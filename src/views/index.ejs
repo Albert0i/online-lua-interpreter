@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    #verticalDivider {
+      left: 50%;
+    }
+    .no-select {
+      user-select: none;
+    }
+  </style>
+</head>
+<body class="h-screen flex flex-col bg-gray-100">
+
+  <!-- Header -->
+  <header class="bg-gray-800 text-white p-4 text-center">
+    <h1 class="text-xl font-semibold"><%= title %></h1>
+    <p class="text-sm text-gray-300"><%= subtitle %></p>
+  </header>
+
+  <!-- Main Layout -->
+  <main class="flex-grow relative flex overflow-hidden">
+
+    <!-- Left Panel -->
+    <section id="editorPanel" class="flex flex-col w-1/2 p-4 overflow-auto bg-white space-y-2">
+      <form action="/" method="POST" class="flex flex-col space-y-2 flex-grow">
+
+        <!-- Parameters Section -->
+        <div class="space-y-1">
+          <div class="flex items-center space-x-2">
+            <label for="keysInput" class="text-sm font-medium whitespace-nowrap">KEYS:</label>
+            <input type="text" id="keysInput" name="keys" class="flex-grow p-1 border rounded text-sm" value="<%= keys.join(',') %>" />
+          </div>
+          <div class="flex items-center space-x-2">
+            <label for="argvInput" class="text-sm font-medium whitespace-nowrap">ARGV:</label>
+            <input type="text" id="argvInput" name="argv" class="flex-grow p-1 border rounded text-sm" value="<%= argv.join(',') %>" />
+          </div>
+        </div>
+
+        <!-- Code Editor -->
+        <textarea id="code" name="code" class="flex-grow p-2 border rounded resize-none font-mono text-sm h-64" placeholder='return "Hello"'><%= code %></textarea>
+
+        <!-- Action Buttons Row -->
+        <div class="flex justify-between items-center">
+          <div class="flex space-x-2">
+            <button type="submit" class="py-1 px-3 bg-blue-600 text-white rounded text-sm hover:bg-blue-700">Run</button>
+            <button type="reset" class="py-1 px-3 bg-gray-300 rounded text-sm hover:bg-gray-400">Reset</button>
+          </div>
+          <button type="button" onclick="window.open('https://redis.io/docs/latest/develop/programmability/eval-intro/', '_blank')" class="py-1 px-3 bg-yellow-500 text-white rounded text-sm hover:bg-yellow-600">Help</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Vertical Divider -->
+    <div id="verticalDivider"
+         class="w-1 bg-gray-400 cursor-col-resize absolute top-0 bottom-0 z-10 no-select">
+    </div>
+
+    <!-- Right Panel -->
+    <section id="outputPanel" class="flex flex-col w-1/2 p-4 overflow-auto bg-gray-50 space-y-2">
+
+      <!-- Script Toolbar -->
+      <div class="flex items-center space-x-2">
+        <select name="scriptSelect" class="border rounded px-2 py-1 text-sm">
+          <option value="">Select</option>
+          <% scripts.forEach(script => { %>
+            <option value="<%= script %>" <%= script === lastEdit ? 'selected' : '' %>><%= script %></option>
+          <% }) %>
+        </select>
+        <input type="text" name="scriptName" value="<%= lastEdit %>" placeholder="Script Name" class="border rounded px-2 py-1 flex-grow text-sm" />
+        <button type="submit" formaction="/load" class="px-3 py-1 bg-gray-300 rounded text-sm hover:bg-gray-400">Load</button>
+        <button type="submit" formaction="/save" class="px-3 py-1 bg-green-500 text-white rounded text-sm hover:bg-green-600">Save</button>
+        <button type="submit" formaction="/delete" class="px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600">Del</button>
+      </div>
+
+      <!-- Output Section -->
+      <div class="flex flex-col space-y-1">
+        <h2 class="text-sm font-semibold">Output:</h2>
+        <pre class="flex-grow bg-white p-2 border rounded font-mono text-sm text-left"><%= output %></pre>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Drag Script + Tab Support -->
+  <script>
+    const divider = document.getElementById('verticalDivider');
+    const editorPanel = document.getElementById('editorPanel');
+    const outputPanel = document.getElementById('outputPanel');
+
+    divider.addEventListener('mousedown', function (e) {
+      e.preventDefault();
+      document.addEventListener('mousemove', resizePanels);
+      document.addEventListener('mouseup', stopResize);
+    });
+
+    function resizePanels(e) {
+      const totalWidth = divider.parentElement.offsetWidth;
+      const newLeftWidth = e.clientX / totalWidth * 100;
+      editorPanel.style.width = `${newLeftWidth}%`;
+      outputPanel.style.width = `${100 - newLeftWidth}%`;
+      divider.style.left = `${newLeftWidth}%`;
+    }
+
+    function stopResize() {
+      document.removeEventListener('mousemove', resizePanels);
+      document.removeEventListener('mouseup', stopResize);
+    }
+
+    // Tab support in textarea
+    document.getElementById('luaCode').addEventListener('keydown', function(e) {
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        const start = this.selectionStart;
+        const end = this.selectionEnd;
+        this.value = this.value.substring(0, start) + '\t' + this.value.substring(end);
+        this.selectionStart = this.selectionEnd = start + 1;
+      }
+    });
+
+    // autoFocus
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('luaCode').focus();
+    });
+  </script>
+
+</body>
+</html>
