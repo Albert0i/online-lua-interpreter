@@ -21,8 +21,8 @@ router.get('/', async (req, res) => {
 
 // POST /
 router.post('/', async (req, res) => {
-  const { keys, argv, code  } = req.body;
-
+  const { keys, argv, code, nameHidden } = req.body;
+  
   const result = await fetch(`http://${process.env.HOST}:${process.env.PORT}/api/v1/scripts`)
   const data = await result.json()
 
@@ -32,7 +32,7 @@ router.post('/', async (req, res) => {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ keys, argv, code })
+      body: JSON.stringify({ keys, argv, code, name: nameHidden })
     } )
 
   const evalOutput = await evalResult.json()
@@ -40,7 +40,7 @@ router.post('/', async (req, res) => {
   res.render('index', {
     subtitle: 'A difficult way to interact with Redis, more harsh than Redis CLI, I assure, and let alone Redis Insight',
     scripts: data.scripts, 
-    lastEdit: data.lastEdit,
+    lastEdit: nameHidden,
     keys,
     argv,
     code,

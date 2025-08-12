@@ -108,11 +108,13 @@ router.post('/eval', async (req, res) => {
   const keys = req.body.keys;
   const argv = req.body.argv;
   const code = req.body.code;
+  const scriptName = req.body.name;
 
-  if (!code ) {
+  console.log('scriptName =', scriptName)
+  if (!scriptName || !code ) {
     return res.status(400).json({
       success: false,
-      message: 'Missing code'
+      message: 'Missing Script name and/or code'
     });
   }
 
@@ -130,6 +132,8 @@ router.post('/eval', async (req, res) => {
   
   return res.json({
       success,
+      lastEdit: scriptName, 
+      code, 
       output
     });
   });
