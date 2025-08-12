@@ -25,8 +25,8 @@ app.use('/api/v1', apiRouter);
 const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 3000;
 
-console.log(await redis.connect())
-console.log(await redis.sendCommand(['HELLO', '3']))
+await redis.connect()
+await redis.sendCommand(['HELLO', '3'])
 
 app.listen(PORT, () => {
   console.log(`Server running at http://${HOST}:${PORT}`);

@@ -12,3 +12,5 @@ A web-based Lua script editor and executor using Node.js, Redis, and TailwindCSS
 ```bash
 npm install
 node app.js
+
+[Lua Online Compiler & Interpreter](https://onecompiler.com/lua)

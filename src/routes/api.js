@@ -62,7 +62,6 @@ router.put('/save', async (req, res) => {
   const now = new Date(); 
   const isoDate = now.toISOString(); 
 
-  //console.log('scriptName =', scriptName, ', code =', code)
   if (!scriptName || !code ) {
     return res.status(400).json({
       success: false,
@@ -85,11 +84,10 @@ router.put('/save', async (req, res) => {
     });
   });
 
-// Placeholder for future endpoints
-router.delete('/delete', (req, res) => {
+// Delete a script
+router.delete('/delete', async (req, res) => {
   const scriptName = req.query.name;
 
-  console.log('scriptName =', scriptName)
   if (!scriptName ) {
     return res.status(400).json({
       success: false,
@@ -97,10 +95,44 @@ router.delete('/delete', (req, res) => {
     });
   }
 
+  await redis.del(getScriptKeyName(scriptName))
+
   return res.json({
       success: true,
       message: `${scriptName} deleted`
     });
   });
+
+// EVAL a script
+router.post('/eval', async (req, res) => {
+  const keys = req.body.keys;
+  const argv = req.body.argv;
+  const code = req.body.code;
+
+  if (!code ) {
+    return res.status(400).json({
+      success: false,
+      message: 'Missing Script name and/or code'
+    });
+  }
+
+  let output = ""
+  let success = true
+  try {
+    output = await redis.eval(code, 
+      { keys: keys ? keys.split(' ') : [ ], 
+        arguments: argv ? argv.split(' ') : [ ] 
+      })
+  } catch (err) {
+    output = err.toString()
+    success = false
+  }
+  
+  return res.json({
+      success,
+      output
+    });
+  });
+
 
 export default router;
