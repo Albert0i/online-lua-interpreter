@@ -11,17 +11,35 @@ const redis = createClient({
         password: process.env.REDIS_PASSWORD,   // Redis password 
     })
 
-redis.on('error', (err) => console.log('Redis Client Error', err));
+redis.on('connect', () => {
+  console.log('Redis client connected');
+});
 
-redis.fCall = function(name, keys = [], args = []) {
-    const numkeys = keys.length.toString();
-    return this.sendCommand(['FCALL', name, numkeys, ...keys, ...args]);
-  };
+redis.on('reconnecting', (delay) => {
+  console.log(`Redis client reconnecting in ${delay}ms`);
+});
 
-redis.fCallRo = function(name, keys = [], args = []) {
-    const numkeys = keys.length.toString();
-    return this.sendCommand(['FCALL_RO', name, numkeys, ...keys, ...args]);
-  };
+redis.on('ready', () => {
+  console.log('Redis client is ready to use');
+});
+
+redis.on('end', () => {
+  console.log('Redis connection closed');
+});
+
+redis.on('error', (err) => {
+  console.error('Redis error:', err);
+});
+
+// redis.fCall = function(name, keys = [], args = []) {
+//     const numkeys = keys.length.toString();
+//     return this.sendCommand(['FCALL', name, numkeys, ...keys, ...args]);
+//   };
+
+// redis.fCallRo = function(name, keys = [], args = []) {
+//     const numkeys = keys.length.toString();
+//     return this.sendCommand(['FCALL_RO', name, numkeys, ...keys, ...args]);
+//   };
 
 export { redis }
 

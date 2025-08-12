@@ -147,110 +147,109 @@
       }
     });
 
+    // All controls 
+    const keys = document.getElementById('keys');
+    const argv = document.getElementById('argv');
+    const editor = document.getElementById('code');
+
+    const dropdown = document.getElementById('scriptSelect');
+    const scriptNameInput = document.getElementById('scriptName');
+    
+    const loadBtn = document.getElementById('loadBtn');
+    const saveBtn = document.getElementById('saveBtn');
+    const deleteBtn = document.getElementById('deleteBtn');
+
+    const output = document.getElementById('output');
+
     // Handle dropdown change 
     document.addEventListener('DOMContentLoaded', () => {
-    const dropdown = document.getElementById('scriptSelect');
-    const textbox = document.getElementById('scriptName');
-
-    if (dropdown && textbox) {
-      dropdown.addEventListener('change', () => {
-        textbox.value = dropdown.value;
-      });
-    } else {
-      console.warn('Dropdown or textbox not found');
-    }
-  });
+      if (dropdown && scriptNameInput) {
+        dropdown.addEventListener('change', () => {
+          scriptNameInput.value = dropdown.value;
+        });
+      } else {
+        console.warn('Dropdown or textbox not found');
+      }
+    });
 
   // Handle load script 
   document.addEventListener('DOMContentLoaded', () => {
-    const loadBtn = document.getElementById('loadBtn');
-    const scriptNameInput = document.getElementById('scriptName');
-    const editor = document.getElementById('code'); // adjust if using CodeMirror etc.
-    const output = document.getElementById('output');
-
     loadBtn.addEventListener('click', async () => {
-      const scriptName = scriptNameInput.value.trim();
-      if (!scriptName) return alert('Script name is empty');
+        const scriptName = scriptNameInput.value.trim();
 
-      try {
-        const res = await fetch(`/api/v1/load?name=${encodeURIComponent(scriptName)}`);
-        const result = await res.json();
+        if (!scriptName) { 
+          output.textContent = 'Script name is empty';
+          return alert('Script name is empty')
+        };
 
-        if (result.success) {
-          editor.value = result.code; // for <textarea>          
-          output.textContent = result.message;
-        } else {
-          alert(result.message || 'Failed to load script');
+        try {
+          const res = await fetch(`/api/v1/load?name=${encodeURIComponent(scriptName)}`);
+          const result = await res.json();
+
+          if (result.success) {
+            editor.value = result.code; // for <textarea>          
+            output.textContent = result.message;
+          } else {
+            alert(result.message || 'Failed to load script');
+          }
+        } catch (err) {
+          console.error('Load error:', err);
+          alert('Error loading script');
         }
-      } catch (err) {
-        console.error('Load error:', err);
-        alert('Error loading script');
-      }
+      });
     });
-  });
 
   // Handle save script 
   document.addEventListener('DOMContentLoaded', () => {
-  const saveBtn = document.getElementById('saveBtn');
-  const scriptNameInput = document.getElementById('scriptName');
-  const editor = document.getElementById('code');
-  const output = document.getElementById('output');
+    saveBtn.addEventListener('click', async (e) => {
+      const scriptName = scriptNameInput.value.trim();
+      const code = editor.value.trim();
 
-  saveBtn.addEventListener('click', async (e) => {
-    e.preventDefault();
-
-    const scriptName = scriptNameInput.value.trim();
-    const code = editor.value.trim();
-
-    if (!scriptName || !code) {
-      output.textContent = 'Script name and/or code must not be empty';
-      return;
-    }
-
-    try {
-      const res = await fetch('/api/v1/save', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: scriptName, code })
-      });
-
-      const result = await res.json();
-      output.textContent = result.message || 'Save response received';
-      } catch (err) {
-        console.error('Save error:', err);
-        output.textContent = 'Error saving script';
+      if (!scriptName || !code) {
+        output.textContent = 'Script name and/or code must not be empty';        
+        return alert('Script name and/or code must not be empty');
       }
+
+      try {
+        const res = await fetch('/api/v1/save', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: scriptName, code })
+        });
+
+        const result = await res.json();
+        output.textContent = result.message || 'Save response received';
+        } catch (err) {
+          console.error('Save error:', err);
+          output.textContent = 'Error saving script';
+        }
+      });
     });
-  });
 
   // Handle delete script 
   deleteBtn.addEventListener('click', async (e) => {
-  //e.preventDefault();
-  const scriptNameInput = document.getElementById('scriptName');
-  const editor = document.getElementById('code');
-  const output = document.getElementById('output');
+    const scriptName = scriptNameInput.value.trim();
 
-  const scriptName = scriptNameInput.value.trim();
-  if (!scriptName) {
-    output.textContent = 'Script name must not be empty';
-    return;
-  }
-
-  const confirmed = confirm(`Are you sure you want to delete "${scriptName}"?`);
-  if (!confirmed) return;
-
-  try {
-    const res = await fetch(`/api/v1/delete?name=${encodeURIComponent(scriptName)}`, {
-      method: 'DELETE'
-    });
-
-    const result = await res.json();
-    output.textContent = result.message || 'Delete response received';
-  } catch (err) {
-      console.error('Delete error:', err);
-      output.textContent = 'Error deleting script';
+    if (!scriptName) {
+      output.textContent = 'Script name must not be empty';
+      return alert('Script name must not be empty')
     }
-  });
+
+    const confirmed = confirm(`Are you sure you want to delete "${scriptName}"?`);
+    if (!confirmed) return;
+
+    try {
+      const res = await fetch(`/api/v1/delete?name=${encodeURIComponent(scriptName)}`, {
+        method: 'DELETE'
+      });
+
+      const result = await res.json();
+      output.textContent = result.message || 'Delete response received';
+    } catch (err) {
+        console.error('Delete error:', err);
+        output.textContent = 'Error deleting script';
+      }
+    });
 
   </script>
 

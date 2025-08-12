@@ -1,4 +1,5 @@
 // routes/index.js
+import 'dotenv/config'
 import express from 'express';
 const router = express.Router();
 
@@ -10,11 +11,14 @@ const router = express.Router();
 // }
 
 // GET /
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
+  const result = await fetch(`http://${process.env.HOST}:${process.env.PORT}/api/v1/scripts`)
+  const data = await result.json()
+
   res.render('index', {
     subtitle: 'A programmatic way to interact with Redis, more challenging than Redis CLI and let alone Redis Insight',
-    scripts: ['init.lua', 'do_this.lua', 'do_that.lua', 'do_nothing.lua'],
-    lastEdit: 'test.lua',
+    scripts: data.scripts, 
+    lastEdit: data.lastEdit,
     keys: [],
     argv:[],
     code: '',
