@@ -112,7 +112,7 @@ router.post('/eval', async (req, res) => {
   if (!code ) {
     return res.status(400).json({
       success: false,
-      message: 'Missing Script name and/or code'
+      message: 'Missing code'
     });
   }
 
