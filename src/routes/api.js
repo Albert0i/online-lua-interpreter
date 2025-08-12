@@ -5,7 +5,7 @@ import { getScriptKeyName, getLastEditKey } from '../utils.js';
 
 const router = express.Router();
 
-// Get available scripts and last edit
+// Get available scripts names and last edit
 // scan 0 MATCH OLI:scripts:* COUNT 100 TYPE HASH
 // GET OLI:lastEdit
 router.get('/scripts', async (req, res) => {
@@ -36,8 +36,8 @@ router.get('/scripts', async (req, res) => {
   })
 })
 
-// Placeholder for future endpoints
-router.get('/load', (req, res) => {
+// Load a script 
+router.get('/load', async (req, res) => {
   const scriptName = req.query.name;
 
   if (!scriptName) {
@@ -47,28 +47,37 @@ router.get('/load', (req, res) => {
     });
   }
 
-  // Simulate loading logic (e.g. from Redis, file, DB)
-  const code = `return "${scriptName} loaded"`;
-
   return res.json({
       success: true,
-      code,
+      code: await redis.hGet(getScriptKeyName(scriptName), 'code'),
       message: `${scriptName} loaded`
     });
   });
 
-// Placeholder for future endpoints
-router.put('/save', (req, res) => {
+// Save a script
+router.put('/save', async (req, res) => {
   const scriptName = req.body.name;
   const code = req.body.code;
 
-  console.log('scriptName =', scriptName, ', code =', code)
+  const now = new Date(); 
+  const isoDate = now.toISOString(); 
+
+  //console.log('scriptName =', scriptName, ', code =', code)
   if (!scriptName || !code ) {
     return res.status(400).json({
       success: false,
       message: 'Missing Script name and/or code'
     });
   }
+
+  await redis.multi()
+             .hSet(getScriptKeyName(scriptName), { 
+                code,
+                updatedAt: isoDate,
+             })
+             .hIncrBy(getScriptKeyName(scriptName), 'updateIdent', 1)
+             .set(getLastEditKey(), scriptName)
+             .exec()
 
   return res.json({
       success: true,
