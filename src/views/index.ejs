@@ -13,13 +13,27 @@
       user-select: none;
     }
   </style>
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
 </head>
 <body class="h-screen flex flex-col bg-gray-100">
 
   <!-- Header -->
-  <header class="bg-gray-800 text-white h-16 p-2 text-center">
-    <h1 class="text-xl font-semibold"><%= title %></h1>
-    <p class="text-sm text-gray-300"><%= subtitle %></p>
+  <header class="bg-gray-800 text-white h-20 px-4 flex items-center justify-between">
+    <!-- Left Logo -->
+    <a href="https://redis.io/docs/latest/develop/programmability/eval-intro/" target="_blank" rel="noopener noreferrer">
+      <img src="/logo.png" alt="Logo Left" class="h-10 w-10 rounded-full">
+    </a>
+  
+    <!-- Centered Title and Subtitle -->
+    <div class="text-center flex-1">
+      <h1 class="text-xl font-semibold">Online Lua Interpreter</h1>
+      <p class="text-sm text-gray-300"><%= subtitle %></p>
+    </div>
+  
+    <!-- Right Logo -->
+    <a href="https://www.lua.org/docs.html" target="_blank" rel="noopener noreferrer">
+      <img src="/luaa.gif" alt="Logo Right" class="h-10 w-10 rounded-full">
+    </a>
   </header>
 
   <!-- Main Layout -->
@@ -50,7 +64,7 @@
             <button type="submit" class="py-1 px-3 bg-blue-600 text-white rounded text-sm hover:bg-blue-700">Run</button>
             <button type="reset" class="py-1 px-3 bg-gray-300 rounded text-sm hover:bg-gray-400">Reset</button>
           </div>
-          <button type="button" onclick="window.open('https://redis.io/docs/latest/develop/programmability/eval-intro/', '_blank')" class="py-1 px-3 bg-yellow-500 text-white rounded text-sm hover:bg-yellow-600">Help</button>
+          <button type="button" onclick="window.open('/LuaQuickReference2.pdf', '_blank')" class="py-1 px-3 bg-yellow-500 text-white rounded text-sm hover:bg-yellow-600">Help</button>
         </div>
       </form>
     </section>
