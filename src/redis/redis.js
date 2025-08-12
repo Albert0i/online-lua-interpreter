@@ -7,6 +7,7 @@ const redis = createClient({
             host: process.env.REDIS_HOST,       // Redis host    
             tls: false
         }, 
+        username: process.env.REDIS_USERNAME,   // Redis user
         password: process.env.REDIS_PASSWORD,   // Redis password 
     })
 

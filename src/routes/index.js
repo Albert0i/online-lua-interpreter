@@ -12,14 +12,13 @@ const router = express.Router();
 // GET /
 router.get('/', (req, res) => {
   res.render('index', {
-    title: 'Online Lua Interpreter',
-    subtitle: 'A difficult way to interact with Redis, more hash than Redis CLI, I assure, and let alone Redis Insight',
+    subtitle: 'A programmatic way to interact with Redis, more challenging than Redis CLI and let alone Redis Insight',
     scripts: ['init.lua', 'do_this.lua', 'do_that.lua', 'do_nothing.lua'],
     lastEdit: 'test.lua',
     keys: [],
     argv:[],
     code: '',
-    output: 'Click on Eval button to see the output'
+    output: 'Click on Run button to see the output'
   });
 });
 
@@ -29,8 +28,7 @@ router.post('/', (req, res) => {
   console.log('params =', req.body)
 
   res.render('index', {
-    title: 'Online Lua Interpreter',
-    subtitle: 'A difficult way to interact with Redis, more hash than Redis CLI, I assure, and let alone Redis Insight',
+    subtitle: 'A difficult way to interact with Redis, more harsh than Redis CLI, I assure, and let alone Redis Insight',
     scripts: ['init.lua', 'do_this.lua', 'do_that.lua', 'do_nothing.lua'],
     lastEdit: '',
     keys,

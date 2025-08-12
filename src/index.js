@@ -4,12 +4,12 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import indexRouter from './routes/index.js';
 import apiRouter from './routes/api.js';
+import { redis } from './redis/redis.js'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -21,6 +21,22 @@ app.use(express.json());
 app.use('/', indexRouter);
 app.use('/api/v1', apiRouter);
 
+// Start server
+const HOST = process.env.HOST || 'localhost';
+const PORT = process.env.PORT || 3000;
+
+console.log(await redis.connect())
+console.log(await redis.sendCommand(['HELLO', '3']))
+
 app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+  console.log(`Server running at http://${HOST}:${PORT}`);
+} ).on('error', (error) => {
+  throw new Error(error.message)
+} );
+
+process.on('SIGINT', async () => {
+  await redis.close()
+  console.log('Caught Ctrl+C (SIGINT). Cleaning up...');
+  // Perform cleanup here (e.g., close DB, stop server)
+  process.exit(0); // Exit gracefully
 });
