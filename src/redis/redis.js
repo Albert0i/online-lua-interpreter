@@ -11,13 +11,13 @@ const redis = createClient({
         password: process.env.REDIS_PASSWORD,   // Redis password 
 
         reconnectStrategy: (retries) => {
-          // Generate a random jitter between 0 – 200 ms:
           const jitter = Math.floor(Math.random() * 200);
-          // Exponential backoff: (2^retries) * 50 ms, capped at 2000 ms:
           const delay = Math.min(Math.pow(2, retries) * 50, 2000);
-    
-          return delay + jitter;
-        }    
+          const totalDelay = delay + jitter;
+      
+          console.log(`Redis client reconnecting in ${totalDelay} ms`);
+          return totalDelay;
+        }                  
     })
 
 redis.on('connect', () => {
