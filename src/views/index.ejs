@@ -63,7 +63,7 @@
         <div class="flex justify-between items-center">
           <div class="flex space-x-2">
             <button type="submit" class="py-1 px-3 bg-blue-600 text-white rounded text-sm hover:bg-blue-700">Run</button>
-            <button type="reset" class="py-1 px-3 bg-gray-300 rounded text-sm hover:bg-gray-400">Reset</button>
+            <button type="button" id="resetBtn" class="py-1 px-3 bg-gray-300 rounded text-sm hover:bg-gray-400" >Reset</button>
           </div>
           <div>
             <p class="text-sm text-gray-900 text-center">
@@ -151,9 +151,9 @@
       }
     });
 
-    // All controls 
-    const keys = document.getElementById('keys');
-    const argv = document.getElementById('argv');
+    // All controls used
+    const keys = document.getElementById('keysInput');
+    const argv = document.getElementById('argvInput');
     const editor = document.getElementById('code');
 
     const dropdown = document.getElementById('scriptSelect');
@@ -163,6 +163,7 @@
     const loadBtn = document.getElementById('loadBtn');
     const saveBtn = document.getElementById('saveBtn');
     const deleteBtn = document.getElementById('deleteBtn');
+    const resetBtn = document.getElementById('resetBtn');
 
     const output = document.getElementById('output');
 
@@ -192,7 +193,7 @@
           const result = await res.json();
 
           if (result.success) {
-            editor.value = result.code; // for <textarea>          
+            editor.value = result.code; // for <textarea>
             output.textContent = result.message;
 
             scriptNameHidden.value = scriptName;
@@ -259,6 +260,13 @@
         output.textContent = 'Error deleting script';
       }
     });
+
+  // Handle reset script
+  resetBtn.addEventListener('click', async (e) => {
+    keys.value = '';
+    argv.value = '';
+    editor.value = ''; 
+  });    
 
   </script>
 
