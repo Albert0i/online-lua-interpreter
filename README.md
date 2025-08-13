@@ -11,10 +11,24 @@ A web-based Lua script editor and executor using Node.js, Redis, and TailwindCSS
 
 
 #### II. Setup
-```bash
-https://github.com/Albert0i/online-lua-interpreter
+```
+git clone https://github.com/Albert0i/online-lua-interpreter
 cd online-lua-interpreter
 npm install
+```
+
+`.env`
+```
+HOST=localhost
+PORT=3000
+
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_USERNAME=default
+REDIS_PASSWORD=123456
+```
+
+```
 npm run dev 
 ```
 ![alt screen1](img/screen1.JPG)
@@ -25,4 +39,4 @@ npm run dev
 2. [Lua Online Compiler & Interpreter](https://onecompiler.com/lua)
 
 
-### EOF (2025/08/12)
+### EOF (2025/08/15)
