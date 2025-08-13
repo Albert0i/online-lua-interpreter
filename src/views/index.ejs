@@ -47,12 +47,12 @@
         <!-- Parameters Section -->
         <div class="space-y-1">
           <div class="flex items-center space-x-2">
-            <label for="keysInput" class="text-sm font-medium whitespace-nowrap">KEYS:</label>
-            <input type="text" id="keysInput" name="keys" class="flex-grow p-1 border rounded text-sm" value="<%= keys %>" />
+            <label for="keysInput" class="text-sm font-medium whitespace-nowrap">KEYS :</label>
+            <input type="text" id="keysInput" name="keys" class="flex-grow p-1 border rounded text-sm" value="<%= keys %>" placeholder="input keys arguments"/>
           </div>
           <div class="flex items-center space-x-2">
             <label for="argvInput" class="text-sm font-medium whitespace-nowrap">ARGV:</label>
-            <input type="text" id="argvInput" name="argv" class="flex-grow p-1 border rounded text-sm" value="<%= argv %>" />
+            <input type="text" id="argvInput" name="argv" class="flex-grow p-1 border rounded text-sm" value="<%= argv %>" placeholder="input regular arguments"/>
           </div>
         </div>
 
@@ -64,6 +64,11 @@
           <div class="flex space-x-2">
             <button type="submit" class="py-1 px-3 bg-blue-600 text-white rounded text-sm hover:bg-blue-700">Run</button>
             <button type="reset" class="py-1 px-3 bg-gray-300 rounded text-sm hover:bg-gray-400">Reset</button>
+          </div>
+          <div>
+            <p class="text-sm text-gray-900 text-center">
+              Built with help from <a href="https://copilot.microsoft.com/" target="_blank" class="underline hover:text-blue-600">Microsoft Copilot</a>
+            </p>
           </div>
           <button type="button" onclick="window.open('/LuaQuickReference2.pdf', '_blank')" class="py-1 px-3 bg-yellow-500 text-white rounded text-sm hover:bg-yellow-600">Help</button>
         </div>
@@ -87,11 +92,11 @@
           <% }) %>
         </select>
 
-        <input type="text" name="scriptName" id="scriptName" value="<%= lastEdit %>" placeholder="Script Name" class="border rounded px-2 py-1 flex-grow text-sm" />
+        <input type="text" name="scriptName" id="scriptName" value="<%= lastEdit %>" placeholder="Script Name" class="border rounded px-2 py-1 flex-grow text-sm w-32" />
 
         <button type="button" id="loadBtn" class="px-3 py-1 bg-gray-300 rounded text-sm hover:bg-gray-400">Load</button>
         <button type="button" id="saveBtn" class="px-3 py-1 bg-green-500 text-white rounded text-sm hover:bg-green-600">Save</button>
-        <button type="button" id="deleteBtn" class="px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600">Del</button>
+        <button type="button" id="deleteBtn" class="px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600">Delete</button>
       </div>
 
     <!-- Output Section -->
