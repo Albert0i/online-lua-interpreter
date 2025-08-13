@@ -1,6 +1,8 @@
 ### Online Lua Interpreter
-
 A web-based Lua script editor and executor using Node.js, Redis, and TailwindCSS.
+
+
+#### Prologue
 
 
 #### I, Features
@@ -34,9 +36,12 @@ npm run dev
 ![alt screen1](img/screen1.JPG)
 
 
-#### III. Reference 
+#### III. Bibliography 
 1. [online demo](https://lua-interpreter.onrender.com/)
 2. [Lua Online Compiler & Interpreter](https://onecompiler.com/lua)
+
+
+#### Epilogue 
 
 
 ### EOF (2025/08/15)
