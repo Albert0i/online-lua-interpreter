@@ -17,6 +17,8 @@ I was much eager to obtain a good quick start guide on programming in [Lua](http
 
 
 #### I. Content
+
+
 ##### 1. Comments 
 In Lua, comment has two styles: 
 ```
@@ -228,7 +230,6 @@ As a bonus, what is the expected behaviour of this code?
 ```
 
 - [Mastering Lua Unpack Table: A Quick Guide](https://luascripts.com/lua-unpack-table)
-
 
 ##### 9. Output
 You can use `redis.log` to output message to `redis.log`. 
