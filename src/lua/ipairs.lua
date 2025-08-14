@@ -1,6 +1,7 @@
 --[[
 	ipairs demo
 ]]
+
 local input= { [1] = "apple", [2] = "banana", [3] = "cherry" }
 local output= {}
 

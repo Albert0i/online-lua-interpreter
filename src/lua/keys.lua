@@ -4,6 +4,7 @@
 		ARGV[1] = pattern name, * if unspecified. 
 		ARGV[2] = max returns, 100 if unspecified. 
 ]]
+
 local pattern = ARGV[1] or ''
 local limit= tonumber(ARGV[2]) or 100
 local cursor = '0'

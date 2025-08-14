@@ -3,6 +3,7 @@
 	Parameters: 
 		KEYS[1] = length, 50 if unspecified. 
 ]]
+
 local count = tonumber(KEYS[1]) or 50
 local output = {}
 

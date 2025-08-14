@@ -4,6 +4,7 @@
       KEYS[1] = Sorted Set key
       KEYS[2] = Segment size (optional, default = 1000)
 ]]
+
 local key = KEYS[1]
 --local segmentSize = tonumber(KEYS[2]) or 1000
 local segmentSize = (KEYS[2] == "0") and 1 or tonumber(KEYS[2]) or 1000

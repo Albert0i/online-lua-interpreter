@@ -71,6 +71,7 @@ router.put('/save', async (req, res) => {
 
   await redis.multi()
              .hSet(getScriptKeyName(scriptName), { 
+                name: scriptName, 
                 code,
                 updatedAt: isoDate,
              })

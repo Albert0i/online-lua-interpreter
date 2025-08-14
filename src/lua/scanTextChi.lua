@@ -9,6 +9,7 @@
         ARGV[]  - Fields to return, ["id", "textChi", "visited"] for example, 
                   Return all fields if unspecified.
 ]]
+
 local keyPrefix = KEYS[1]
 local fieldName = KEYS[2]
 local checkValue = KEYS[3]
@@ -30,7 +31,8 @@ for _, key in ipairs(keys) do
     local text = redis.call("HGET", key, fieldName)
     
     -- If found and contains the value
-    if (text) and (string.find(text, checkValue)) then 
+    -- if (text) and (string.find(text, checkValue)) then 
+    if (text) and (string.find(string.lower(text), string.lower(checkValue))) then 
     -- Skip offset 
     if offset > 0 then 
         offset = offset - 1

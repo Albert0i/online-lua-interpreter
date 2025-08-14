@@ -1,6 +1,7 @@
 --[[
 	fib demo
 ]]
+
 local number = tonumber(ARGV[1]) or 10
 
 local function fib(n)

@@ -4,6 +4,7 @@
         ARGV[1] = Prefix pattern (e.g., "user:*")
         ARGV[2] = max deletes, 1000 if unspecified. 
 ]]
+
 local pattern = ARGV[1]
 local limit= tonumber(ARGV[2]) or 1000
 local cursor = "0"

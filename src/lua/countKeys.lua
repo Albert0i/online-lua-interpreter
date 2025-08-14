@@ -3,6 +3,7 @@
 	Parameters: 
 		KEYS[1] = Prefix pattern (e.g., "user:*"), * if unspecified
 ]]
+
 local key = KEYS[1] or ''
 local cursor = "0"
 local totalCount = 0

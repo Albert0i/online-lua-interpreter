@@ -1,6 +1,7 @@
 --[[
 	pairs demo
 ]]
+
 local input = { a = "apple", b = "banana", c = "cherry" }
 local output = {}
 

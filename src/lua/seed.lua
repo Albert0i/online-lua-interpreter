@@ -2,6 +2,7 @@
 	Small script to seed database
 	Parameters: None
 ]]
+
 redis.call("HSET", "OLI:scripts:init.lua", "code", "return 'init'", "updatedAt", "2025-08-12 11:02:01.769", "updateIdent", "0" )
 
 redis.call("HSET", "OLI:scripts:do_this.lua", "code", "return 'do this'", "updatedAt", "2025-08-12 11:02:01.769", "updateIdent", "0" )
