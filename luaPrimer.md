@@ -17,6 +17,47 @@ I was much eager to obtain a good quick start guide on programming in [Lua](http
 
 
 #### I. 
+1. Comments 
+In Lua, comment has two styles: 
+```
+-- This is a SQL-like single line comment. 
+
+--[[
+    This comment spans more 
+    than one lines. 
+    The syntax is a little weird. 
+]]
+```
+
+2. Variables
+In Lua, variable definition not precedes with **local** is conceived to be  global scope and by convention global variable should starts with capital letter, although you are not restricted to do so. 
+Under Redis, all variable definition *MUST* be local scope., you just can't use: 
+```
+Variable = "value"
+```
+
+Which incurs a: 
+```
+Error: ERR Error running script: @globals:9: Script attempted to create global variable 'Variable' stack traceback:  [G]: in function 'error'  @globals:9: in function <@globals:5>  @user_script:1: in main chunk  [G]: ?
+```
+
+You have to use: 
+```
+local variable = "value"
+```
+
+3. `status_reply` and `error_reply`
+The standard way to reply 'Ok': 
+```
+redis.status_reply('Ok')
+```
+
+The standard way to reply an error: 
+```
+redis.error_reply('ERR My very special table error')
+```
+
+> **Note**: By convention, Redis uses the first word of an error string as a unique error code for specific errors or ERR for general-purpose errors. Scripts are advised to follow this convention, as shown in the example above, but this is not mandatory.
 
 #### II. 
 
