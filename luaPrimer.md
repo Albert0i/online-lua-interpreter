@@ -254,7 +254,8 @@ redis.error_reply('ERR My very special table error')
 
 > **Note**: By convention, Redis uses the first word of an error string as a unique error code for specific errors or ERR for general-purpose errors. Scripts are advised to follow this convention, as shown in the example above, but this is not mandatory.
 
-#### II. 
+
+#### II. Retrospection
 
 
 #### III. Bibliography 
