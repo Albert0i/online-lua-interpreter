@@ -25,9 +25,9 @@ In Lua, comment has two styles:
 -- This is a SQL-like single line comment. 
 
 --[[
-    This comment spans more 
-    than one lines. 
-    The syntax is a little weird. 
+    This comment spans more than one lines. 
+    The syntax is bizarre, pretty much a 
+    -- follows by a multi-line string. 
 ]]
 ```
 
@@ -117,9 +117,43 @@ OK
 
 > The above script accepts one key name and one value as its input arguments. When executed, the script calls the [SET](https://redis.io/docs/latest/commands/set/) command to set the input key, foo, with the string value "bar".
 
-##### 6. 
+##### 6. Parallel assignment
+Function returns multiple values.
+```
+local function myfunc() 
+	return 100, 'lua', { "a", "table" } 
+end 
 
-##### 7. 
+local score, name, output = myfunc() 
+```
+
+Swapping without introducing temporary variable.
+```
+local a, b = 100, 200
+
+a, b = b, a
+```
+
+##### 7. `..` and `...`
+`..` is string concatenate operator in Lua, this is akin to `||` in SQL statement.
+```
+local name = 'Lua'
+local message = 'Hi ' ..name.. ' nice to neet you.'
+```
+`...` on the other hand is for unknow number of arguments in function definition. 
+```
+local function sum(...) 
+	local args = {...}
+	local total = 0 
+
+    for i=1, #args do
+        total = total + args[i]
+    end 
+    return total 
+end 
+
+local n = sum(1, 2, 3, 4, 5)
+```
 
 ##### 8. ["Strange Case of Lua Table"](https://www.gutenberg.org/files/43/43-h/43-h.htm)
 
