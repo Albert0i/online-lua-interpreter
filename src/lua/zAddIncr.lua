@@ -1,8 +1,9 @@
--- Add member to Sorted Set
--- Required:
---      KEYS[1] = Sorted Set key
---      ARGV[] = One or more members 
-
+--[[
+  Add member to Sorted Set
+  Parameters:
+    KEYS[1] = Sorted Set key
+    ARGV[] = One or more members 
+]]
 local key = KEYS[1]
 local added = 0
 local n = 0

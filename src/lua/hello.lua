@@ -2,4 +2,4 @@
 	Small script to return "hello, lua"
 	Parameters: None
 ]]
-return "hello, lua"
+return redis.status_reply("hello, lua")
