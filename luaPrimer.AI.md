@@ -1,7 +1,3 @@
-Absolutely. Here's a **comprehensive Lua Primer** designed for clarity, depth, and practical use—especially for scripting environments like your Redis Lua interpreter. It’s structured to support both learning and reference, with emphasis on idiomatic Lua, metaprogramming, and Redis integration.
-
----
-
 # 🐚 Lua Primer: A Comprehensive Guide for Embedded Scripting
 
 Lua is a lightweight, embeddable scripting language with a minimalist syntax and powerful metaprogramming capabilities. It’s widely used in game engines, embedded systems, and tools like Redis for atomic scripting.
@@ -20,7 +16,7 @@ Lua is a lightweight, embeddable scripting language with a minimalist syntax and
 ## 🔤 2. Syntax & Types
 
 ### ✍️ Comments
-```lua
+7```lua
 -- Single-line comment
 --[[
    Multi-line comment
@@ -275,7 +271,3 @@ redis.call("SET", KEYS[1], current + 1)
 - Prefer `pairs()` for maps, `ipairs()` for arrays.
 - Embrace closures and functional patterns.
 - Keep scripts short and readable—Lua rewards clarity.
-
----
-
-Would you like this formatted as a collapsible sidebar in your interpreter UI? I can also break it into interactive tabs (Basics, Tables, Redis, etc.) or generate a printable reference card. Just say the word.
