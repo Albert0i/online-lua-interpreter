@@ -4,6 +4,7 @@
 
 #### Prologue
 > Scripts are executed in Redis by an embedded execution engine. Presently, Redis supports a single scripting engine, the [Lua 5.1](https://www.lua.org/) interpreter. Please refer to the [Redis Lua API Reference](https://redis.io/docs/latest/develop/programmability/lua-api/) page for complete documentation. 
+
 More on [Scripting with Lua](https://redis.io/docs/latest/develop/programmability/eval-intro/). 
 
 
