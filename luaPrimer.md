@@ -104,7 +104,18 @@ end
 ::done::
 ```
 
-##### 5. 
+##### 5. Interacting with Redis from a script
+> It is possible to call Redis commands from a Lua script either via [redis.call()](https://redis.io/docs/latest/develop/programmability/lua-api/#redis.call) or [redis.pcall()](https://redis.io/docs/latest/develop/programmability/lua-api/#redis.pcall).
+
+> The two are nearly identical. Both execute a Redis command along with its provided arguments, if these represent a well-formed command. However, the difference between the two functions lies in the manner in which runtime errors (such as syntax errors, for example) are handled. Errors raised from calling redis.call() function are returned directly to the client that had executed it. Conversely, errors encountered when calling the redis.pcall() function are returned to the script's execution context instead for possible handling.
+
+> For example, consider the following:
+```
+> EVAL "return redis.call('SET', KEYS[1], ARGV[1])" 1 foo bar
+OK
+```
+
+> The above script accepts one key name and one value as its input arguments. When executed, the script calls the [SET](https://redis.io/docs/latest/commands/set/) command to set the input key, foo, with the string value "bar".
 
 ##### 6. 
 
