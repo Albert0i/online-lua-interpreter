@@ -46,7 +46,74 @@ You have to use:
 local variable = "value"
 ```
 
-3. `status_reply` and `error_reply`
+3. Use `end` to mark end of scope
+```
+for i = 1, 5 do
+
+end
+
+while x < 10 do
+
+  x = x + 1
+end
+
+repeat
+
+  x = x + 1
+until x > 10
+
+function greet(name)
+  print("Hello, " .. name)
+end
+
+do
+  local temp = 42
+  print(temp)
+end
+
+if x > 0 then
+  print("Positive")
+elseif x < 0 then
+  print("Negative")
+else
+  print("Zero")
+end
+```
+
+With the exception of `repeat until`:
+```
+repeat
+
+  x = x + 1
+until x > 10
+```
+
+4. Use `goto` to quit endless loop
+```
+::start::
+while true do
+  local x = math.random()
+
+  if x > 0.9 then
+    goto done
+  end
+end
+
+::done::
+```
+
+9. Output
+You can use `redis.log` to output message to `redis.log`. 
+```
+redis.log(redis.LOG_WARNING, 'Something is terribly wrong')
+```
+
+Will produce a line similar to the following in your server's log:
+```
+[32343] 22 Mar 15:21:39 # Something is terribly wrong
+```
+
+10. Return
 The standard way to reply 'Ok': 
 ```
 redis.status_reply('Ok')
@@ -61,11 +128,8 @@ redis.error_reply('ERR My very special table error')
 
 #### II. 
 
-#### IIII. 
 
-#### IV. 
-
-#### V. Bibliography 
+#### III. Bibliography 
 1. [Programming in Lua (first edition)](https://www.lua.org/pil/contents.html)
 2. [Lua 5.1 Reference Manual](https://www.lua.org/manual/5.1/)
 3. [Lua Primer](https://fennel-lang.org/lua-primer)
