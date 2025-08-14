@@ -302,6 +302,9 @@ redis.error_reply('ERR My very special table error')
 
 
 #### II. Retrospection
+Lua bears pecular traits of languages which are not derived from [C](https://en.wikipedia.org/wiki/C_(programming_language)) family. Typically, one-based array, parallel assignment and [coroutine](https://www.lua.org/manual/5.4/manual.html#2.6:~:text=2.6%20%E2%80%93-,Coroutines,-Lua%20supports%20coroutines) (協同子程序) are hardly seen on modern programming languages. 
+
+Lua borrows syntax from Modula which is 
 
 
 #### III. Bibliography 
