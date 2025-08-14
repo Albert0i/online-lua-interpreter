@@ -16,8 +16,9 @@ Lua is a lightweight, embeddable scripting language with a minimalist syntax and
 ## 🔤 2. Syntax & Types
 
 ### ✍️ Comments
-7```lua
+```lua
 -- Single-line comment
+
 --[[
    Multi-line comment
 ]]
