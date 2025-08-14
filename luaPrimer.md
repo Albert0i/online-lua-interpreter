@@ -13,15 +13,22 @@ I was looking for a good quick start guide on programming in Lua under Redis and
 
 More on [Lua](https://en.wikipedia.org/wiki/Lua). 
 
+> Lua lets you run part of your application logic inside Redis. Such scripts can perform conditional updates across multiple keys, possibly combining several different data types atomically.
+
 > Scripts are executed in Redis by an embedded execution engine. Presently, Redis supports a single scripting engine, the [Lua 5.1](https://www.lua.org/) interpreter. Please refer to the [Redis Lua API Reference](https://redis.io/docs/latest/develop/programmability/lua-api/) page for complete documentation. 
 
 More on [Scripting with Lua](https://redis.io/docs/latest/develop/programmability/eval-intro/). 
 
 
-####
+#### I. 
 
+#### II. 
 
-#### Bibliography 
+#### IIII. 
+
+#### IV. 
+
+#### V. Bibliography 
 1. [Programming in Lua (first edition)](https://www.lua.org/pil/contents.html)
 2. [Lua 5.1 Reference Manual](https://www.lua.org/manual/5.1/)
 3. [Lua Primer](https://fennel-lang.org/lua-primer)
