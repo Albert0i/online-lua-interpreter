@@ -306,6 +306,8 @@ Lua bears pecular traits of languages which are not derived from [C](https://en.
 
 Lua borrows syntax from Modula which was descendant of the [Pascal](https://en.wikipedia.org/wiki/Pascal_(programming_language)) language. The `begin/do`and `end` syntax to define a block are characteristic infrequently seen. 
 
+Table, the only composite data structure, borrows from [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)) and provides unparalleled flexibility to handle structured data. 
+
 
 #### III. Bibliography 
 1. [Programming in Lua (first edition)](https://www.lua.org/pil/contents.html)
