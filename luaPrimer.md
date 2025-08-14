@@ -17,7 +17,7 @@ I was much eager to obtain a good quick start guide on programming in [Lua](http
 
 
 #### I. Content
-1. Comments 
+##### 1. Comments 
 In Lua, comment has two styles: 
 ```
 -- This is a SQL-like single line comment. 
@@ -29,7 +29,7 @@ In Lua, comment has two styles:
 ]]
 ```
 
-2. Variables
+##### 2. Variables
 In Lua, variable definition not precedes with **local** is conceived to be  global scope and by convention global variable should starts with capital letter, although you are not restricted to do so. 
 Under Redis, all variable definition *MUST* be local scope., you just can't use: 
 ```
@@ -46,7 +46,7 @@ You have to use:
 local variable = "value"
 ```
 
-3. Use `end` to mark end of scope
+##### 3. Use `end` to mark end of scope
 ```
 for i = 1, 5 do
 
@@ -88,7 +88,7 @@ repeat
 until x > 10
 ```
 
-4. Use `goto` to quit endless loop
+##### 4. Use `goto` to quit endless loop
 ```
 ::start::
 while true do
@@ -102,13 +102,13 @@ end
 ::done::
 ```
 
-5. 
+##### 5. 
 
-6. 
+##### 6. 
 
-7. 
+##### 7. 
 
-8. ["Strange Case of Lua Table"](https://www.gutenberg.org/files/43/43-h/43-h.htm)
+##### 8. ["Strange Case of Lua Table"](https://www.gutenberg.org/files/43/43-h/43-h.htm)
 
 The *one and only one* data structure in Lua is table, which has two favours: 
 - **Array style table** 
@@ -230,7 +230,7 @@ As a bonus, what is the expected behaviour of this code?
 - [Mastering Lua Unpack Table: A Quick Guide](https://luascripts.com/lua-unpack-table)
 
 
-9. Output
+##### 9. Output
 You can use `redis.log` to output message to `redis.log`. 
 ```
 redis.log(redis.LOG_WARNING, 'Something is terribly wrong')
@@ -241,7 +241,7 @@ Will produce a line similar to the following in your server's log:
 [32343] 22 Mar 15:21:39 # Something is terribly wrong
 ```
 
-10. Return
+##### 10. Return
 The standard way to reply 'Ok': 
 ```
 redis.status_reply('Ok')
