@@ -370,7 +370,7 @@ local function taskA(x)
   local z = coroutine.yield(y)
   table.insert(output, ' z = ' .. z)
 
-  return "ecstasy"
+  return z
 end
 
 local function print(r, m) 
@@ -396,7 +396,7 @@ Output:
  x = fossil, 
  ret = true, msg = fossil, y = stigmata, 
  ret = true, msg = stigmata, z = delirium, 
- ret = true, msg = ecstasy, 
+ ret = true, msg = delirium, 
  ret = false, msg = can not resume a dead thread
 ```
 
