@@ -5,6 +5,9 @@
 #### Prologue
 I was much eager to obtain a good quick start guide on programming in [Lua](https://en.wikipedia.org/wiki/Lua) in Redis and it turned out I have to create my own... 
 
+Lua is full of memories not because I love moon, it is an artefact with pecular language constructs which are stigmata from elapsed epoch. 
+
+
 #### I. Brief History
 > Lua (/[ˈluːə](https://en.wikipedia.org/wiki/Help:IPA/English)/ [LOO-ə](https://en.wikipedia.org/wiki/Help:Pronunciation_respelling_key); from [Portuguese](https://en.wikipedia.org/wiki/Portuguese_language): [lua](https://en.wiktionary.org/wiki/lua#Portuguese) [[ˈlu(w)ɐ](https://en.wikipedia.org/wiki/Help:IPA/Portuguese)] meaning [moon](https://en.wikipedia.org/wiki/Moon)) is a [lightweight](https://en.wikipedia.org/wiki/Lightweight_programming_language), [high-level](https://en.wikipedia.org/wiki/High-level_programming_language), [multi-paradigm](https://en.wikipedia.org/wiki/Multi-paradigm_programming_language) [programming language](https://en.wikipedia.org/wiki/Programming_language) designed mainly for [embedded use](https://en.wikipedia.org/wiki/Scripting_language) in applications.[[3](https://en.wikipedia.org/wiki/Lua#cite_note-luaspe-3)]
 
@@ -310,6 +313,13 @@ Lua bears pecular traits of languages which are not derived from [C](https://en.
 Lua borrows syntax from Modula which was descendant of the [Pascal](https://en.wikipedia.org/wiki/Pascal_(programming_language)) language. The `begin/do`and `end` syntax to define a block are characteristic infrequently seen. 
 
 Table, the only composite data structure, borrows from [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)) and provides unparalleled flexibility to handle structured data. 
+
+I am going to demonstrate two unique language features in Lua which is not present in most of modern programming languages.
+
+##### 1. Parallel Assignment 
+
+
+##### 2. Coroutines 
 
 
 #### IV. Bibliography 
