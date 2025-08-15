@@ -5,7 +5,7 @@
 #### Prologue
 I was much eager to obtain a good quick start guide on programming in [Lua](https://en.wikipedia.org/wiki/Lua) in Redis and it turned out I have to create my own... 
 
-Lua is full of memories not because I love moon, it is an artefact with pecular language constructs which are stigmata from elapsed epoch. 
+Lua is full of memories not because I love moon, it is an artefact with pecular language constructs which are stigmata from epoch elapsed. 
 
 
 #### I. Brief History
