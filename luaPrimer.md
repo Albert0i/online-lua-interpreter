@@ -316,7 +316,33 @@ Table, the only composite data structure, borrows from [Lisp](https://en.wikiped
 
 I am going to demonstrate two unique language features in Lua which is not present in most of modern programming languages.
 
-##### 1. Parallel Assignment 
+##### 1. Parallel [assignment](https://www.lua.org/manual/5.1/manual.html#2.5:~:text=2.4.3%20%E2%80%93-,Assignment,-Lua%20allows%20multiple)
+> Lua allows multiple assignments. Therefore, the syntax for assignment defines a list of variables on the left side and a list of expressions on the right side. The elements in both lists are separated by commas:
+```
+  stat ::= varlist `=´ explist
+	varlist ::= var {`,´ var}
+	explist ::= exp {`,´ exp}
+```
+
+> Before the assignment, the list of values is *adjusted* to the length of the list of variables. If there are more values than needed, the excess values are thrown away. If there are fewer values than needed, the list is extended with as many nil's as needed. If the list of expressions ends with a function call, then all values returned by that call enter the list of values, before the adjustment (except when the call is enclosed in parentheses; see [§2.5](https://www.lua.org/manual/5.1/manual.html#2.5)).
+
+> The assignment statement first evaluates all its expressions and only then are the assignments performed. Thus the code
+```
+     i = 3
+     i, a[i] = i+1, 20
+```     
+
+> sets a[3] to 20, without affecting a[4] because the i in a[i] is evaluated (to 3) before it is assigned 4. Similarly, the line
+```
+     x, y = y, x
+```     
+
+> exchanges the values of x and y, and
+```
+     x, y, z = y, z, x
+```     
+
+> cyclically permutes the values of x, y, and z.
 
 
 ##### 2. Coroutines 
