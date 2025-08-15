@@ -308,12 +308,6 @@ redis.error_reply('ERR My very special table error')
 
 
 #### III. Retrospection
-Lua bears pecular traits of languages which are not derived from [C](https://en.wikipedia.org/wiki/C_(programming_language)) family. Typically, one-based array, parallel assignment and [coroutine](https://www.lua.org/manual/5.4/manual.html#2.6:~:text=2.6%20%E2%80%93-,Coroutines,-Lua%20supports%20coroutines) (協同子程序) are hardly seen on modern programming languages. 
-
-Lua borrows syntax from Modula which was descendant of the [Pascal](https://en.wikipedia.org/wiki/Pascal_(programming_language)) language. The `begin/do`and `end` syntax to define a block are characteristic infrequently seen. 
-
-Table, the only composite data structure, borrows from [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)) and provides unparalleled flexibility to handle structured data. 
-
 I am going to demonstrate two unique language features in Lua which are not present in most of modern programming languages today.
 
 ##### 1. Parallel [assignment](https://www.lua.org/manual/5.1/manual.html#2.5:~:text=2.4.3%20%E2%80%93-,Assignment,-Lua%20allows%20multiple)
@@ -357,6 +351,11 @@ I am going to demonstrate two unique language features in Lua which are not pres
 
 
 #### Epilogue 
+Lua bears pecular traits of languages which are not derived from [C](https://en.wikipedia.org/wiki/C_(programming_language)) family. Typically, one-based array, parallel assignment and [coroutine](https://www.lua.org/manual/5.4/manual.html#2.6:~:text=2.6%20%E2%80%93-,Coroutines,-Lua%20supports%20coroutines) (協同子程序) are hardly seen on modern programming languages. 
+
+Lua borrows syntax from Modula which was descendant of the [Pascal](https://en.wikipedia.org/wiki/Pascal_(programming_language)) language. The `begin/do`and `end` syntax to define a block are characteristic infrequently seen. 
+
+Table, the only composite data structure, borrows from [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)) and provides unparalleled flexibility to handle structured data. 
 
 
 ### EOF(2025/08/15)
