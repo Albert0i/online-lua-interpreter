@@ -358,40 +358,48 @@ The answer is *non-deterministic*. It is unsafe to assume any sort of order in t
 > A coroutine yields by calling [coroutine.yield](https://www.lua.org/manual/5.1/manual.html#pdf-coroutine.yield). When a coroutine yields, the corresponding [coroutine.resume](https://www.lua.org/manual/5.1/manual.html#pdf-coroutine.resume) returns immediately, even if the yield happens inside nested function calls (that is, not in the main function, but in a function directly or indirectly called by the main function). In the case of a yield, coroutine.resume also returns **true**, plus any values passed to [coroutine.yield](https://www.lua.org/manual/5.1/manual.html#pdf-coroutine.yield). The next time you resume the same coroutine, it continues its execution from the point where it yielded, with the call to [coroutine.yield](https://www.lua.org/manual/5.1/manual.html#pdf-coroutine.yield) returning any extra arguments passed to [coroutine.resume](https://www.lua.org/manual/5.1/manual.html#pdf-coroutine.resume).
 
 > Like [coroutine.create](https://www.lua.org/manual/5.1/manual.html#pdf-coroutine.create), the [coroutine.wrap](https://www.lua.org/manual/5.1/manual.html#pdf-coroutine.wrap) function also creates a coroutine, but instead of returning the coroutine itself, it returns a function that, when called, resumes the coroutine. Any arguments passed to this function go as extra arguments to [coroutine.resume](https://www.lua.org/manual/5.1/manual.html#pdf-coroutine.resume). [coroutine.wrap](https://www.lua.org/manual/5.1/manual.html#pdf-coroutine.wrap) returns all the values returned by [coroutine.resume](https://www.lua.org/manual/5.1/manual.html#pdf-coroutine.resume), except the first one (the boolean error code). Unlike [coroutine.resume](https://www.lua.org/manual/5.1/manual.html#pdf-coroutine.resume), [coroutine.wrap](https://www.lua.org/manual/5.1/manual.html#pdf-coroutine.wrap) does not catch errors; any error is propagated to the caller.
+
+`coroutine.lua`
 ```
-local output = {} 
+local ret, msg, output = true, '', {} 
 
-local function task(x, y, z)
-  table.insert(output, "Start (" .. x.. ")")
-  coroutine.yield("Started")  -- pause here
+local function taskA(x)
+  table.insert(output, ' x = ' .. x)
+  local y = coroutine.yield(x)
+  table.insert(output, ' y = ' .. y)
+  local z = coroutine.yield(y)
+  table.insert(output, ' z = ' .. z)
 
-  table.insert(output, "Continue (" .. y.. ")")
-  coroutine.yield("Continued")  -- pause here
-
-  table.insert(output, "Finished (" .. z.. ")")
-  return "Finished"
+  return "ecstasy"
 end
 
-local co = coroutine.create(task)
-local r, msg
+local function print(r, m) 
+	table.insert(output, ' ret = '.. tostring(r))
+	table.insert(output, ' msg = '.. tostring(m))
+end 
 
-table.insert(output, coroutine.status(co))	-- suspended
-r, msg = coroutine.resume(co, 1, 2, 3)            -- prints "Start"
-table.insert(output, msg)
-
-r, msg = coroutine.resume(co, 1, 2, 3)        	-- prints "Continue"
-table.insert(output, msg)
-
-table.insert(output, coroutine.status(co))	-- suspended x 3
-r, msg = coroutine.resume(co, 1, 2, 3)      -- prints "Finish"
-table.insert(output, msg)
-
-table.insert(output, coroutine.status(co))	-- dead 
-r, msg = coroutine.resume(co)      -- prints nothing
-table.insert(output, msg)
+local co = coroutine.create(taskA)
+ret, msg = coroutine.resume(co, "fossil")
+print(ret, msg)
+ret, msg = coroutine.resume(co, "stigmata")
+print(ret, msg)
+ret, msg = coroutine.resume(co, "delirium")
+print(ret, msg)
+ret, msg = coroutine.resume(co, "ecstasy")
+print(ret, msg)
 
 return output
 ```
+
+Output: 
+```
+ x = fossil, 
+ ret = true, msg = fossil, y = stigmata, 
+ ret = true, msg = stigmata, z = delirium, 
+ ret = true, msg = ecstasy, 
+ ret = false, msg = can not resume a dead thread
+```
+
 
 #### IV. Bibliography 
 1. [Programming in Lua (first edition)](https://www.lua.org/pil/contents.html)
