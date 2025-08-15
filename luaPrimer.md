@@ -314,7 +314,7 @@ Lua borrows syntax from Modula which was descendant of the [Pascal](https://en.w
 
 Table, the only composite data structure, borrows from [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)) and provides unparalleled flexibility to handle structured data. 
 
-I am going to demonstrate two unique language features in Lua which is not present in most of modern programming languages.
+I am going to demonstrate two unique language features in Lua which are not present in most of modern programming languages today.
 
 ##### 1. Parallel [assignment](https://www.lua.org/manual/5.1/manual.html#2.5:~:text=2.4.3%20%E2%80%93-,Assignment,-Lua%20allows%20multiple)
 > Lua allows multiple assignments. Therefore, the syntax for assignment defines a list of variables on the left side and a list of expressions on the right side. The elements in both lists are separated by commas:
