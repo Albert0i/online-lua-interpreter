@@ -3,7 +3,10 @@
 
 
 #### Prologue
-I was much eager to obtain a good quick start guide on programming in [Lua](https://en.wikipedia.org/wiki/Lua) in Redis and it turns out I have to create my own... 
+I was much eager to obtain a good quick start guide on programming in [Lua](https://en.wikipedia.org/wiki/Lua) in Redis and it turned out I have to create my own... 
+
+#### I. Brief History
+> Lua (/[ˈluːə](https://en.wikipedia.org/wiki/Help:IPA/English)/ [LOO-ə](https://en.wikipedia.org/wiki/Help:Pronunciation_respelling_key); from [Portuguese](https://en.wikipedia.org/wiki/Portuguese_language): [lua](https://en.wiktionary.org/wiki/lua#Portuguese) [[ˈlu(w)ɐ](https://en.wikipedia.org/wiki/Help:IPA/Portuguese)] meaning [moon](https://en.wikipedia.org/wiki/Moon)) is a [lightweight](https://en.wikipedia.org/wiki/Lightweight_programming_language), [high-level](https://en.wikipedia.org/wiki/High-level_programming_language), [multi-paradigm](https://en.wikipedia.org/wiki/Multi-paradigm_programming_language) [programming language](https://en.wikipedia.org/wiki/Programming_language) designed mainly for [embedded use](https://en.wikipedia.org/wiki/Scripting_language) in applications.[[3](https://en.wikipedia.org/wiki/Lua#cite_note-luaspe-3)]
 
 > Lua [syntax](https://en.wikipedia.org/wiki/Syntax_(programming_languages)) for control structures was mostly borrowed from [Modula](https://en.wikipedia.org/wiki/Modula) (`if`, `while`, `repeat/until`), but also had taken influence from [CLU](https://en.wikipedia.org/wiki/CLU_(programming_language)) (multiple assignments and multiple returns from function calls, as a simpler alternative to [reference parameters](https://en.wikipedia.org/wiki/Call_by_reference) or explicit [pointers](https://en.wikipedia.org/wiki/Pointer_(computer_programming))), [C++](https://en.wikipedia.org/wiki/C%2B%2B) ("neat idea of allowing a [local variable](https://en.wikipedia.org/wiki/Local_variable) to be declared only where we need it"[[6](https://en.wikipedia.org/wiki/Lua#cite_note-hopl2007-6)]), [SNOBOL](https://en.wikipedia.org/wiki/SNOBOL) and [AWK](https://en.wikipedia.org/wiki/AWK) ([associative arrays](https://en.wikipedia.org/wiki/Associative_array)). 
 
@@ -301,7 +304,7 @@ redis.error_reply('ERR My very special table error')
 > **Note**: By convention, Redis uses the first word of an error string as a unique error code for specific errors or ERR for general-purpose errors. Scripts are advised to follow this convention, as shown in the example above, but this is not mandatory.
 
 
-#### II. Retrospection
+#### III. Retrospection
 Lua bears pecular traits of languages which are not derived from [C](https://en.wikipedia.org/wiki/C_(programming_language)) family. Typically, one-based array, parallel assignment and [coroutine](https://www.lua.org/manual/5.4/manual.html#2.6:~:text=2.6%20%E2%80%93-,Coroutines,-Lua%20supports%20coroutines) (協同子程序) are hardly seen on modern programming languages. 
 
 Lua borrows syntax from Modula which was descendant of the [Pascal](https://en.wikipedia.org/wiki/Pascal_(programming_language)) language. The `begin/do`and `end` syntax to define a block are characteristic infrequently seen. 
@@ -309,7 +312,7 @@ Lua borrows syntax from Modula which was descendant of the [Pascal](https://en.w
 Table, the only composite data structure, borrows from [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)) and provides unparalleled flexibility to handle structured data. 
 
 
-#### III. Bibliography 
+#### IV. Bibliography 
 1. [Programming in Lua (first edition)](https://www.lua.org/pil/contents.html)
 2. [Lua 5.1 Reference Manual](https://www.lua.org/manual/5.1/)
 3. [Lua Primer](https://fennel-lang.org/lua-primer)
