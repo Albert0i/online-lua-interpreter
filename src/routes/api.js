@@ -29,10 +29,14 @@ router.get('/scripts', async (req, res) => {
     scripts.push(...keys);
   } while (cursor !== '0');
 
+  // check existence
+  const lastEdit = await redis.get(getLastEditKey())
+  const exists = await redis.exists(getScriptKeyName(lastEdit))
+
   return res.status(200).json({
     success: true, 
     scripts: scripts.map(script => script.split(':')[2]),
-    lastEdit: await redis.get(getLastEditKey())
+    lastEdit: exists ? lastEdit: ''
   })
 })
 
@@ -51,8 +55,8 @@ router.get('/load', async (req, res) => {
       success: true,
       code: await redis.hGet(getScriptKeyName(scriptName), 'code'),
       message: `${scriptName} loaded`
-    });
   });
+});
 
 // Save a script
 router.put('/save', async (req, res) => {
@@ -69,21 +73,41 @@ router.put('/save', async (req, res) => {
     });
   }
 
-  await redis.multi()
-             .hSet(getScriptKeyName(scriptName), { 
-                name: scriptName, 
-                code,
-                updatedAt: isoDate,
-             })
-             .hIncrBy(getScriptKeyName(scriptName), 'updateIdent', 1)
-             .set(getLastEditKey(), scriptName)
-             .exec()
+  // check existence 
+  const exists = await redis.exists(getScriptKeyName(scriptName))
+  if (! exists ) {
+      // Create
+      await redis.multi()
+          .hSet(getScriptKeyName(scriptName), { 
+            name: scriptName, 
+            code,
+            createdAt: isoDate,
+            updateIdent: 0
+          })
+          .set(getLastEditKey(), scriptName)
+          .exec()
 
-  return res.json({
+      return res.json({
+      success: true,
+      message: `${scriptName} created`
+    });    
+  } else {
+      // Update 
+      await redis.multi()
+          .hSet(getScriptKeyName(scriptName), { 
+            code,
+            updatedAt: isoDate,
+          })
+          .hIncrBy(getScriptKeyName(scriptName), 'updateIdent', 1)
+          .set(getLastEditKey(), scriptName)
+          .exec()
+
+      return res.json({
       success: true,
       message: `${scriptName} saved`
-    });
-  });
+    });    
+  }
+});
 
 // Delete a script
 router.delete('/delete', async (req, res) => {
@@ -140,3 +164,35 @@ router.post('/eval', async (req, res) => {
   });
 
 export default router;
+
+/*
+router.put('/save', async (req, res) => {
+  const scriptName = req.body.name;
+  const code = req.body.code;
+
+  const now = new Date(); 
+  const isoDate = now.toISOString(); 
+
+  if (!scriptName || !code ) {
+    return res.status(400).json({
+      success: false,
+      message: 'Missing Script name and/or code'
+    });
+  }
+
+  await redis.multi()
+             .hSet(getScriptKeyName(scriptName), { 
+                name: scriptName, 
+                code,
+                updatedAt: isoDate,
+             })
+             .hIncrBy(getScriptKeyName(scriptName), 'updateIdent', 1)
+             .set(getLastEditKey(), scriptName)
+             .exec()
+
+  return res.json({
+      success: true,
+      message: `${scriptName} saved`
+    });
+  });
+*/
