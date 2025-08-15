@@ -419,15 +419,15 @@ local function producer()
 end 
 local function consumer() 
 	while true do
-		local n = math.random(1, 30)
+		local n = math.random(1, 20)
 		for j=1, n do 
-			local e = redis.call('RPOP', joblist)
-			if not (e) then 
-				n = j 
+			local val = redis.call('RPOP', joblist)
+			if (val == false) then 
+				coroutine.yield(j..'j')
 				break
 			end
 		end 
-		coroutine.yield(n)
+		coroutine.yield(n..'n')
 	end 
 end 
 local function print(m) 
@@ -451,27 +451,27 @@ return output
 
 Output:
 ```
- len = 0, 
- ret =true produced = 4, len = 4, 
- ret =true consumed = 1, len = 3, 
- ret =true produced = 5, len = 8, 
- ret =true consumed = 9, len = 0, 
- ret =true produced = 1, len = 1, 
- ret =true consumed = 1, len = 0, 
- ret =true produced = 5, len = 5, 
- ret =true consumed = 3, len = 2, 
- ret =true produced = 9, len = 11, 
- ret =true consumed = 12, len = 0, 
- ret =true produced = 4, len = 4, 
- ret =true consumed = 5, len = 0, 
- ret =true produced = 5, len = 5, 
- ret =true consumed = 2, len = 3, 
- ret =true produced = 2, len = 5, 
- ret =true consumed = 6, len = 0, 
- ret =true produced = 7, len = 7, 
- ret =true consumed = 8, len = 0, 
- ret =true produced = 3, len = 3, 
- ret =true consumed = 4
+len = 0, 
+ret =true produced = 10, len = 10, 
+ret =true consumed = 4n, len = 6, 
+ret =true produced = 2, len = 8, 
+ret =true consumed = 9j, len = 0, 
+ret =true produced = 9, len = 9, 
+ret =true consumed = 19n, len = 9, 
+ret =true produced = 7, len = 16, 
+ret =true consumed = 17j, len = 0, 
+ret =true produced = 3, len = 3, 
+ret =true consumed = 20n, len = 3, 
+ret =true produced = 4, len = 7, 
+ret =true consumed = 8j, len = 0, 
+ret =true produced = 10, len = 10, 
+ret =true consumed = 18n, len = 10, 
+ret =true produced = 6, len = 16, 
+ret =true consumed = 17j, len = 0, 
+ret =true produced = 2, len = 2, 
+ret =true consumed = 18n, len = 2, 
+ret =true produced = 8, len = 10, 
+ret =true consumed = 10n
 ```
 
 Coroutine was once an important concept where computer was expensive and multitasking operating system was not popular. 

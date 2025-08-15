@@ -13,15 +13,15 @@ local function producer()
 end 
 local function consumer() 
 	while true do
-		local n = math.random(1, 30)
+		local n = math.random(1, 20)
 		for j=1, n do 
-			local e = redis.call('RPOP', joblist)
-			if not (e) then 
-				n = j 
+			local val = redis.call('RPOP', joblist)
+			if (val == false) then 
+				coroutine.yield(j..'j')
 				break
 			end
 		end 
-		coroutine.yield(n)
+		coroutine.yield(n..'n')
 	end 
 end 
 local function print(m) 
