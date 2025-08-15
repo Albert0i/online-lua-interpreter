@@ -338,9 +338,60 @@ I am going to discuss two unique language features in Lua which are not present 
 
 > cyclically permutes the values of x, y, and z.
 
+The documentation does not mention the *order* of execution of each pairs of assignment, 
+```
+local a, b, c = func1(), func2(), func3() 
+```
 
-##### 2. Coroutines 
+The answer is *non-deterministic*. It is unsafe to assume any sort of order in the other words, correctness of result should *not* depend on any order of exection. 
 
+
+##### 2. [Coroutines](https://www.lua.org/manual/5.1/manual.html#2.5:~:text=2.11%20%E2%80%93-,Coroutines,-Lua%20supports%20coroutines) 
+> Lua supports coroutines, also called **collaborative multithreading**. A coroutine in Lua represents an independent thread of execution. Unlike threads in multithread systems, however, a coroutine only suspends its execution by explicitly calling a yield function.
+
+> You create a coroutine with a call to [coroutine.create](https://www.lua.org/manual/5.1/manual.html#pdf-coroutine.create). Its sole argument is a function that is the main function of the coroutine. The `create` function only creates a new coroutine and returns a handle to it (an object of type **thread**); it does not start the coroutine execution.
+
+> When you first call [coroutine.resume](https://www.lua.org/manual/5.1/manual.html#pdf-coroutine.resume), passing as its first argument a thread returned by [coroutine.create](https://www.lua.org/manual/5.1/manual.html#pdf-coroutine.create), the coroutine starts its execution, at the first line of its main function. Extra arguments passed to [coroutine.resume](https://www.lua.org/manual/5.1/manual.html#pdf-coroutine.resume) are passed on to the coroutine main function. After the coroutine starts running, it runs until it terminates or **yields**.
+
+> A coroutine can terminate its execution in two ways: normally, when its main function returns (explicitly or implicitly, after the last instruction); and abnormally, if there is an unprotected error. In the first case, [coroutine.resume](https://www.lua.org/manual/5.1/manual.html#pdf-coroutine.resume) returns **true**, plus any values returned by the coroutine main function. In case of errors, [coroutine.resume](https://www.lua.org/manual/5.1/manual.html#pdf-coroutine.resume) returns **false** plus an error message.
+
+> A coroutine yields by calling [coroutine.yield](https://www.lua.org/manual/5.1/manual.html#pdf-coroutine.yield). When a coroutine yields, the corresponding [coroutine.resume](https://www.lua.org/manual/5.1/manual.html#pdf-coroutine.resume) returns immediately, even if the yield happens inside nested function calls (that is, not in the main function, but in a function directly or indirectly called by the main function). In the case of a yield, coroutine.resume also returns **true**, plus any values passed to [coroutine.yield](https://www.lua.org/manual/5.1/manual.html#pdf-coroutine.yield). The next time you resume the same coroutine, it continues its execution from the point where it yielded, with the call to [coroutine.yield](https://www.lua.org/manual/5.1/manual.html#pdf-coroutine.yield) returning any extra arguments passed to [coroutine.resume](https://www.lua.org/manual/5.1/manual.html#pdf-coroutine.resume).
+
+> Like [coroutine.create](https://www.lua.org/manual/5.1/manual.html#pdf-coroutine.create), the [coroutine.wrap](https://www.lua.org/manual/5.1/manual.html#pdf-coroutine.wrap) function also creates a coroutine, but instead of returning the coroutine itself, it returns a function that, when called, resumes the coroutine. Any arguments passed to this function go as extra arguments to [coroutine.resume](https://www.lua.org/manual/5.1/manual.html#pdf-coroutine.resume). [coroutine.wrap](https://www.lua.org/manual/5.1/manual.html#pdf-coroutine.wrap) returns all the values returned by [coroutine.resume](https://www.lua.org/manual/5.1/manual.html#pdf-coroutine.resume), except the first one (the boolean error code). Unlike [coroutine.resume](https://www.lua.org/manual/5.1/manual.html#pdf-coroutine.resume), [coroutine.wrap](https://www.lua.org/manual/5.1/manual.html#pdf-coroutine.wrap) does not catch errors; any error is propagated to the caller.
+```
+local output = {} 
+
+local function task(x, y, z)
+  table.insert(output, "Start (" .. x.. ")")
+  coroutine.yield("Started")  -- pause here
+
+  table.insert(output, "Continue (" .. y.. ")")
+  coroutine.yield("Continued")  -- pause here
+
+  table.insert(output, "Finished (" .. z.. ")")
+  return "Finished"
+end
+
+local co = coroutine.create(task)
+local r, msg
+
+table.insert(output, coroutine.status(co))	-- suspended
+r, msg = coroutine.resume(co, 1, 2, 3)            -- prints "Start"
+table.insert(output, msg)
+
+r, msg = coroutine.resume(co, 1, 2, 3)        	-- prints "Continue"
+table.insert(output, msg)
+
+table.insert(output, coroutine.status(co))	-- suspended x 3
+r, msg = coroutine.resume(co, 1, 2, 3)      -- prints "Finish"
+table.insert(output, msg)
+
+table.insert(output, coroutine.status(co))	-- dead 
+r, msg = coroutine.resume(co)      -- prints nothing
+table.insert(output, msg)
+
+return output
+```
 
 #### IV. Bibliography 
 1. [Programming in Lua (first edition)](https://www.lua.org/pil/contents.html)
