@@ -400,6 +400,82 @@ Output:
  ret = false, msg = can not resume a dead thread
 ```
 
+The use of `coroutine.resume` and `coroutine.yield` to pass in and out values is elusive and unintelligible at first sight. While the above example is trivial, let's look at another example. 
+
+`prodcons.lua`
+```
+local ret, msg, joblist, output = true, '', 'joblist', {} 
+local timestamp = unpack(redis.call('TIME'))
+math.randomseed(tonumber(timestamp))
+
+local function producer() 
+	while true do
+		local n = math.random(1, 10)
+		for j=1, n do 
+			redis.call('LPUSH', joblist, math.random(1, 10))
+		end 
+		coroutine.yield(n)
+	end 
+end 
+local function consumer() 
+	while true do
+		local n = math.random(1, 30)
+		for j=1, n do 
+			local e = redis.call('RPOP', joblist)
+			if not (e) then 
+				n = j 
+				break
+			end
+		end 
+		coroutine.yield(n)
+	end 
+end 
+local function print(m) 
+	table.insert(output, m)
+end 
+
+local coprod = coroutine.create(producer)
+local cocons = coroutine.create(consumer)
+
+for i=1, 10 do 
+	print(' len = '..redis.call('LLEN', joblist))
+	ret, msg = coroutine.resume(coprod) 
+	print(' ret ='..tostring(ret)..' produced = '..msg)
+	print(' len = '..redis.call('LLEN', joblist))
+	ret, msg = coroutine.resume(cocons) 
+	print(' ret ='..tostring(ret)..' consumed = '..msg)
+end
+
+return output
+```
+
+Output:
+```
+ len = 0, 
+ ret =true produced = 4, len = 4, 
+ ret =true consumed = 1, len = 3, 
+ ret =true produced = 5, len = 8, 
+ ret =true consumed = 9, len = 0, 
+ ret =true produced = 1, len = 1, 
+ ret =true consumed = 1, len = 0, 
+ ret =true produced = 5, len = 5, 
+ ret =true consumed = 3, len = 2, 
+ ret =true produced = 9, len = 11, 
+ ret =true consumed = 12, len = 0, 
+ ret =true produced = 4, len = 4, 
+ ret =true consumed = 5, len = 0, 
+ ret =true produced = 5, len = 5, 
+ ret =true consumed = 2, len = 3, 
+ ret =true produced = 2, len = 5, 
+ ret =true consumed = 6, len = 0, 
+ ret =true produced = 7, len = 7, 
+ ret =true consumed = 8, len = 0, 
+ ret =true produced = 3, len = 3, 
+ ret =true consumed = 4
+```
+
+Coroutine was once an important concept where computer was expensive and multitasking operating system was not popular. 
+
 
 #### IV. Bibliography 
 1. [Programming in Lua (first edition)](https://www.lua.org/pil/contents.html)
