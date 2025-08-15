@@ -308,7 +308,7 @@ redis.error_reply('ERR My very special table error')
 
 
 #### III. Retrospection
-I am going to demonstrate two unique language features in Lua which are not present in modern programming languages today.
+I am going to discuss two unique language features in Lua which are not present in modern programming languages.
 
 ##### 1. Parallel [assignment](https://www.lua.org/manual/5.1/manual.html#2.5:~:text=2.4.3%20%E2%80%93-,Assignment,-Lua%20allows%20multiple)
 > Lua allows multiple assignments. Therefore, the syntax for assignment defines a list of variables on the left side and a list of expressions on the right side. The elements in both lists are separated by commas:
