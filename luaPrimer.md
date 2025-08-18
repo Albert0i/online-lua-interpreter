@@ -346,7 +346,7 @@ redis.error_reply('ERR My very special table error')
 
 
 #### III. Retrospection
-I am going to discuss two unique exoticism in Lua which are not present in modern programming languages. 
+I am going to discuss two unique characteristic in Lua which are not present in modern programming languages. 
 
 ##### 1. Parallel [assignment](https://www.lua.org/manual/5.1/manual.html#2.5:~:text=2.4.3%20%E2%80%93-,Assignment,-Lua%20allows%20multiple)
 > Lua allows multiple assignments. Therefore, the syntax for assignment defines a list of variables on the left side and a list of expressions on the right side. The elements in both lists are separated by commas:
@@ -376,13 +376,19 @@ I am going to discuss two unique exoticism in Lua which are not present in moder
 
 > cyclically permutes the values of x, y, and z.
 
-The documentation does not mention the *order* of execution of each pairs of assignment, 
+But what about the *order* of execution of each pairs of assignment, 
 ```
 local a, b, c = func1(), func2(), func3() 
 ```
 
-The answer is *non-deterministic*. It is unsafe to assume any sort of order in the other words, correctness of result should *not* depend on any order of exection. 
+It is natural to envisaged as, 
+```
+local a = func1()
+local b = func2()
+local c = func3()
+```
 
+The assignment is done on `a` first, then on `b` and at last on `c`... As far as the documentation is concerned, and for sake of correctness, you should consider it *non-deterministic* order of execution. In the other words, It is unsafe to assume order of any sort. Parallel assignment has to be used with care if execution of `func1()`, `func2()` and `func3()` may interfer with each other. 
 
 ##### 2. [Coroutines](https://www.lua.org/manual/5.1/manual.html#2.5:~:text=2.11%20%E2%80%93-,Coroutines,-Lua%20supports%20coroutines) 
 > Lua supports coroutines, also called **collaborative multithreading**. A coroutine in Lua represents an independent thread of execution. Unlike threads in multithread systems, however, a coroutine only suspends its execution by explicitly calling a yield function.
@@ -518,7 +524,7 @@ ret =true, produced = 9, len = 17,
 ret =true, consumed = 15, len = 2
 ```
 
-Coroutine was once an important concept where computer was expensive and multitasking operating system was not popular. 
+Ideally, producer and consumer are working synchronously but in practical producer are always faster and more than one consumers should be employed. Coroutine was once an important concept where computer was expensive and multitasking operating system was not popular. Later on ,coroutine was replaced by [multithreading](https://en.wikipedia.org/wiki/Multithreading_(computer_architecture)) and one has reminisced it ever since. 
 
 
 #### IV. Bibliography 
