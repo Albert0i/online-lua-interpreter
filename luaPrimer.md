@@ -400,7 +400,7 @@ Output:
  ret = false, msg = can not resume a dead thread
 ```
 
-The use of `coroutine.resume` and `coroutine.yield` to pass in and out values is elusive, unintelligible and beyond imagination at first sight. While the above example is trivial, let's look at another example. 
+The use of `coroutine.resume` and `coroutine.yield` to pass in and out values is elusive, unintelligible and beyond imagination at first sight. While the above example is trivial, let's look at another. 
 
 `prodcons.lua`
 ```
