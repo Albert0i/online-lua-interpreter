@@ -400,7 +400,7 @@ Output:
  ret = false, msg = can not resume a dead thread
 ```
 
-The use of `coroutine.resume` and `coroutine.yield` to pass in and out values is elusive and unintelligible at first sight. While the above example is trivial, let's look at another example. 
+The use of `coroutine.resume` and `coroutine.yield` to pass in and out values is elusive, unintelligible and beyond imagination at first sight. While the above example is trivial, let's look at another example. 
 
 `prodcons.lua`
 ```
@@ -412,14 +412,14 @@ local function producer()
 	while true do
 		local n = math.random(1, 10)
 		for j=1, n do 
-			redis.call('LPUSH', joblist, math.random(1, 10))
+			redis.call('LPUSH', joblist, math.random(1, 9999))
 		end 
 		coroutine.yield(n)
 	end 
 end 
 local function consumer() 
 	while true do
-		local n = math.random(1, 20)
+		local n = math.random(1, 15)
 		for j=1, n do 
 			local val = redis.call('RPOP', joblist)
 			if (val == false) then 
@@ -452,6 +452,8 @@ end
 
 return output
 ```
+
+[Producer-Consumer problem](https://en.wikipedia.org/wiki/Producer%E2%80%93consumer_problem) is canonical programming example of cooperation. A fast producer incurs backlog; a fast consumer incurs starvation. In our example, we use a random `n` to control number of jobs to process, ie. producer pushes `n` number of 1~9999 into list and yield whereas consumer pulls `n` numbers out and yield. I deliberately let consumer runs faster than producer, consumer has two yield path, ie. either `n` is reached or list is empty. 
 
 Output:
 ```
@@ -497,4 +499,4 @@ Lua borrows syntax from Modula which was descendant of the [Pascal](https://en.w
 Table, the only composite data structure, borrows from [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)) and provides unparalleled flexibility to handle structured data. 
 
 
-### EOF(2025/08/15)
+### EOF(2025/08/22)
