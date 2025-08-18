@@ -388,7 +388,23 @@ local b = func2()
 local c = func3()
 ```
 
-The assignment is done on `a` first, then on `b` and at last on `c`... As far as the documentation is concerned, and for sake of correctness, you should consider it *non-deterministic* order of execution. In the other words, It is unsafe to assume order of any sort. Parallel assignment has to be used with care if execution of `func1()`, `func2()` and `func3()` may interfer with each other. 
+The assignment is done on `a` first, then on `b` and at last on `c`... As far as the documentation is concerned, and for sake of correctness, you should consider it *non-deterministic* order of execution. In the other words, It is unsafe to assume order of any sort. Parallel assignment has to be used with care if execution of `func1()`, `func2()` and `func3()` may interfer with each other. In extreme case, what is the expected output of the following code? 
+
+```
+local a, b, c = 1, 2, 3
+local func1 = function() b = b + 10 c = c + 10 return a end 
+local func2 = function() a = a + 10 c = c + 10 return b end 
+local func3 = function() a = a + 10 b = b + 10 return c end 
+
+a, b, c = func1(), func2(), func3()
+
+return { a, b, c }
+```
+
+And it gives: 
+```
+1,12,23
+```
 
 ##### 2. [Coroutines](https://www.lua.org/manual/5.1/manual.html#2.5:~:text=2.11%20%E2%80%93-,Coroutines,-Lua%20supports%20coroutines) 
 > Lua supports coroutines, also called **collaborative multithreading**. A coroutine in Lua represents an independent thread of execution. Unlike threads in multithread systems, however, a coroutine only suspends its execution by explicitly calling a yield function.
@@ -524,7 +540,7 @@ ret =true, produced = 9, len = 17,
 ret =true, consumed = 15, len = 2
 ```
 
-Ideally, producer and consumer are working synchronously but in practical producer are always faster and more than one consumers should be employed. Coroutine was once an important concept where computer was expensive and multitasking operating system was not popular. Later on ,coroutine was replaced by [multithreading](https://en.wikipedia.org/wiki/Multithreading_(computer_architecture)) and one has reminisced it ever since. 
+Ideally, producer and consumer are working synchronously but in practical producer are always faster and more than one consumers should be employed. Coroutine was once an important concept where computer was expensive and multitasking operating system was not popular. Later on coroutine was replaced by [multithreading](https://en.wikipedia.org/wiki/Multithreading_(computer_architecture)) and one has reminisced it ever since. 
 
 
 #### IV. Bibliography 

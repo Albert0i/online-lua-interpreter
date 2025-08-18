@@ -6,14 +6,14 @@ local function producer()
 	while true do
 		local n = math.random(1, 10)
 		for j=1, n do 
-			redis.call('LPUSH', joblist, math.random(1, 10))
+			redis.call('LPUSH', joblist, math.random(1, 9999))
 		end 
 		coroutine.yield(n)
 	end 
 end 
 local function consumer() 
 	while true do
-		local n = math.random(1, 20)
+		local n = math.random(1, 15)
 		for j=1, n do 
 			local val = redis.call('RPOP', joblist)
 			if (val == false) then 
