@@ -406,6 +406,25 @@ And it gives:
 1,12,23
 ```
 
+To compare with: 
+```
+local a, b, c = 1, 2, 3
+local func1 = function() b = b + 10 c = c + 10 return a end 
+local func2 = function() a = a + 10 c = c + 10 return b end 
+local func3 = function() a = a + 10 b = b + 10 return c end 
+
+a = func1()
+b = func2()
+c = func3()
+
+return { a, b, c }
+```
+
+And it gives: 
+```
+21,22,23
+```
+
 ##### 2. [Coroutines](https://www.lua.org/manual/5.1/manual.html#2.5:~:text=2.11%20%E2%80%93-,Coroutines,-Lua%20supports%20coroutines) 
 > Lua supports coroutines, also called **collaborative multithreading**. A coroutine in Lua represents an independent thread of execution. Unlike threads in multithread systems, however, a coroutine only suspends its execution by explicitly calling a yield function.
 
