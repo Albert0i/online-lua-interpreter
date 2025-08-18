@@ -1,4 +1,4 @@
-local ret, msg, joblist, output = true, '', 'joblist', {} 
+local ret, msg, joblist, output = true, '', 'prodcons:joblist', {} 
 local timestamp = unpack(redis.call('TIME'))
 math.randomseed(tonumber(timestamp))
 
@@ -17,11 +17,14 @@ local function consumer()
 		for j=1, n do 
 			local val = redis.call('RPOP', joblist)
 			if (val == false) then 
-				coroutine.yield(j..'j')
+				coroutine.yield((j-1)..'/'..n)
+				n = 0
 				break
 			end
 		end 
-		coroutine.yield(n..'n')
+		if n~=0 then 
+			coroutine.yield(n)
+		end
 	end 
 end 
 local function print(m) 
@@ -31,13 +34,14 @@ end
 local coprod = coroutine.create(producer)
 local cocons = coroutine.create(consumer)
 
+print('initial len = '..redis.call('LLEN', joblist))
 for i=1, 10 do 
-	print(' len = '..redis.call('LLEN', joblist))
 	ret, msg = coroutine.resume(coprod) 
-	print(' ret ='..tostring(ret)..' produced = '..msg)
+	print(' ret ='..tostring(ret)..', produced = '..msg)
 	print(' len = '..redis.call('LLEN', joblist))
 	ret, msg = coroutine.resume(cocons) 
-	print(' ret ='..tostring(ret)..' consumed = '..msg)
+	print(' ret ='..tostring(ret)..', consumed = '..msg)
+    print(' len = '..redis.call('LLEN', joblist))
 end
 
 return output

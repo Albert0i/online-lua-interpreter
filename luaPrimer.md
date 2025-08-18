@@ -404,7 +404,7 @@ The use of `coroutine.resume` and `coroutine.yield` to pass in and out values is
 
 `prodcons.lua`
 ```
-local ret, msg, joblist, output = true, '', 'joblist', {} 
+local ret, msg, joblist, output = true, '', 'prodcons:joblist', {} 
 local timestamp = unpack(redis.call('TIME'))
 math.randomseed(tonumber(timestamp))
 
@@ -423,11 +423,14 @@ local function consumer()
 		for j=1, n do 
 			local val = redis.call('RPOP', joblist)
 			if (val == false) then 
-				coroutine.yield(j..'j')
+				coroutine.yield((j-1)..'/'..n)
+				n = 0
 				break
 			end
 		end 
-		coroutine.yield(n..'n')
+		if n~=0 then 
+			coroutine.yield(n)
+		end
 	end 
 end 
 local function print(m) 
@@ -437,13 +440,14 @@ end
 local coprod = coroutine.create(producer)
 local cocons = coroutine.create(consumer)
 
+print('initial len = '..redis.call('LLEN', joblist))
 for i=1, 10 do 
-	print(' len = '..redis.call('LLEN', joblist))
 	ret, msg = coroutine.resume(coprod) 
-	print(' ret ='..tostring(ret)..' produced = '..msg)
+	print(' ret ='..tostring(ret)..', produced = '..msg)
 	print(' len = '..redis.call('LLEN', joblist))
 	ret, msg = coroutine.resume(cocons) 
-	print(' ret ='..tostring(ret)..' consumed = '..msg)
+	print(' ret ='..tostring(ret)..', consumed = '..msg)
+    print(' len = '..redis.call('LLEN', joblist))
 end
 
 return output
@@ -451,27 +455,27 @@ return output
 
 Output:
 ```
-len = 0, 
-ret =true produced = 10, len = 10, 
-ret =true consumed = 4n, len = 6, 
-ret =true produced = 2, len = 8, 
-ret =true consumed = 9j, len = 0, 
-ret =true produced = 9, len = 9, 
-ret =true consumed = 19n, len = 9, 
-ret =true produced = 7, len = 16, 
-ret =true consumed = 17j, len = 0, 
-ret =true produced = 3, len = 3, 
-ret =true consumed = 20n, len = 3, 
-ret =true produced = 4, len = 7, 
-ret =true consumed = 8j, len = 0, 
-ret =true produced = 10, len = 10, 
-ret =true consumed = 18n, len = 10, 
-ret =true produced = 6, len = 16, 
-ret =true consumed = 17j, len = 0, 
-ret =true produced = 2, len = 2, 
-ret =true consumed = 18n, len = 2, 
-ret =true produced = 8, len = 10, 
-ret =true consumed = 10n
+initial len = 3, 
+ret =true, produced = 4, len = 7, 
+ret =true, consumed = 7/11, len = 0, 
+ret =true, produced = 1, len = 1, 
+ret =true, consumed = 1, len = 0, 
+ret =true, produced = 6, len = 6, 
+ret =true, consumed = 6/14, len = 0, 
+ret =true, produced = 9, len = 9, 
+ret =true, consumed = 9/11, len = 0, 
+ret =true, produced = 10, len = 10, 
+ret =true, consumed = 6, len = 4, 
+ret =true, produced = 4, len = 8, 
+ret =true, consumed = 8/13, len = 0, 
+ret =true, produced = 8, len = 8, 
+ret =true, consumed = 5, len = 3, 
+ret =true, produced = 5, len = 8, 
+ret =true, consumed = 5, len = 3, 
+ret =true, produced = 8, len = 11, 
+ret =true, consumed = 3, len = 8, 
+ret =true, produced = 9, len = 17, 
+ret =true, consumed = 15, len = 2
 ```
 
 Coroutine was once an important concept where computer was expensive and multitasking operating system was not popular. 
