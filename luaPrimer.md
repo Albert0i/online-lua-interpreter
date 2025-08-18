@@ -578,4 +578,4 @@ Lua borrows syntax from Modula which was descendant of the [Pascal](https://en.w
 Table, the only composite data structure, borrows from [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)) and provides unparalleled flexibility to handle structured data. 
 
 
-### EOF(2025/08/22)
+### EOF(2025/08/18)
