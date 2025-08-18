@@ -5,7 +5,7 @@
 #### Prologue
 I was much eager to obtain a good quick start guide on programming in [Lua](https://en.wikipedia.org/wiki/Lua) in Redis and it turned out I have to create my own... 
 
-Lua is full of memories not because I love moon, it is an artefact with pecular language constructs which are stigmata from epoch elapsed. 
+Lua is full of memories not because I love moon... Lua it is an artefact with pecular language constructs which are fossil of technology evolution and stigmata from epoch elapsed. 
 
 
 #### I. Brief History
@@ -24,11 +24,10 @@ Lua is full of memories not because I love moon, it is an artefact with pecular 
 
 #### I. Content
 
-
 ##### 1. Comments 
-In Lua, comment has two styles: 
+Before writing any code, it's crucial to know how to write comments both for mindful and mindless people. In Lua, comment has two forms: 
 ```
--- This is a SQL-like single line comment. 
+-- This is a single line, SQL-like comment. 
 
 --[[
     This comment spans more than one lines. 
@@ -37,24 +36,25 @@ In Lua, comment has two styles:
 ]]
 ```
 
-##### 2. Variables
-In Lua, variable definition not precedes with **local** is conceived to be  global scope and by convention global variable should starts with capital letter, although you are not restricted to do so. 
-Under Redis, all variable definition *MUST* be local scope., you just can't use: 
+##### 2. Variables 
+In Lua, variable definition not precedes with keyword **local** is conceived to be global scope and by convention global variable starts with capital letter, although you are not restricted to do so. 
+
+Under Redis, all variable definitions *MUST* be local scope., you just can't use: 
 ```
 Variable = "value"
 ```
 
-Which incurs a: 
+Which triggers a: 
 ```
 Error: ERR Error running script: @globals:9: Script attempted to create global variable 'Variable' stack traceback:  [G]: in function 'error'  @globals:9: in function <@globals:5>  @user_script:1: in main chunk  [G]: ?
 ```
 
-You have to use: 
+This is the first pitfall you may come across. The proper way is:
 ```
 local variable = "value"
 ```
 
-##### 3. Use `end` to mark end of scope
+##### 3. Use `end` to mark end of scope 
 ```
 for i = 1, 5 do
 
@@ -96,7 +96,9 @@ repeat
 until x > 10
 ```
 
-##### 4. Use `goto` to quit endless loop
+This is the second pitfall if you are from C family. 
+
+##### 4. Use [`goto`](http://lua-users.org/wiki/GotoStatement) to quit nested loop
 ```
 ::start::
 while true do
@@ -110,7 +112,9 @@ end
 ::done::
 ```
 
-##### 5. Interacting with Redis from a script
+Although it is uncommon today, `goto` is one of the important trait of programming languages of early age. 
+
+##### 5. Use `call` and `pcall` to interact with Redis
 > It is possible to call Redis commands from a Lua script either via [redis.call()](https://redis.io/docs/latest/develop/programmability/lua-api/#redis.call) or [redis.pcall()](https://redis.io/docs/latest/develop/programmability/lua-api/#redis.pcall).
 
 > The two are nearly identical. Both execute a Redis command along with its provided arguments, if these represent a well-formed command. However, the difference between the two functions lies in the manner in which runtime errors (such as syntax errors, for example) are handled. Errors raised from calling redis.call() function are returned directly to the client that had executed it. Conversely, errors encountered when calling the redis.pcall() function are returned to the script's execution context instead for possible handling.
@@ -124,7 +128,7 @@ OK
 > The above script accepts one key name and one value as its input arguments. When executed, the script calls the [SET](https://redis.io/docs/latest/commands/set/) command to set the input key, foo, with the string value "bar".
 
 ##### 6. Parallel assignment
-Function returns multiple values.
+Function in Lua can returns more than one value.
 ```
 local function myfunc() 
 	return 100, 'lua', { "a", "table" } 
@@ -133,20 +137,23 @@ end
 local score, name, output = myfunc() 
 ```
 
-Swapping without introducing temporary variable.
+Swapping values without introducing extra variable.
 ```
 local a, b = 100, 200
 
 a, b = b, a
 ```
 
-##### 7. `..` and `...`
-`..` is string concatenate operator in Lua, this is akin to `||` in SQL statement.
+This feature is not available in most languages. You can effectively define and initialize many variables in one line, like a guru. 
+
+##### 7. `..` and `...` syntax
+`..` is string concatenate operator in Lua, this is akin to `||` in SQL statement. Lua has `table.concat` function but not `string.concat`. 
 ```
 local name = 'Lua'
 local message = 'Hi ' ..name.. ' nice to neet you.'
 ```
-`...` on the other hand is for unknow number of arguments in function definition. 
+
+`...` is for variable number of arguments in function definition. 
 ```
 local function sum(...) 
 	local args = {...}
@@ -161,8 +168,20 @@ end
 local n = sum(1, 2, 3, 4, 5)
 ```
 
-##### 8. ["Strange Case of Lua Table"](https://www.gutenberg.org/files/43/43-h/43-h.htm)
+In the above example, `...` stands for 1, 2, 3, 4, 5 five individual arguments. Use of `{...}` turns the arguments to a table. By dint of `{...}`, you can process unknown number of arguments in a funciton. By the way, Lua doesn't support default parameters in the function signature like Python or JavaScript. But you can easily simulate them using idiomatic Lua patterns.
+```
+function greet(name)
+  name = name or "stranger"
+  print("Hello, " .. name)
+end
 
+greet()         -- Hello, stranger
+greet("Iong")   -- Hello, Iong
+```
+
+This is the third pitfall you may come across. 
+
+##### 8. ["Strange Case of Lua Table"](https://www.gutenberg.org/files/43/43-h/43-h.htm)
 The *one and only one* data structure in Lua is table, which has two favours: 
 - **Array style table** 
 ```
@@ -293,8 +312,27 @@ Will produce a line similar to the following in your server's log:
 [32343] 22 Mar 15:21:39 # Something is terribly wrong
 ```
 
+This is possible provided that `redis.conf` is properly set up and you have access to `redis.log` file.
+
+`redis.log`
+```
+# Specify the server verbosity level.
+# This can be one of:
+# debug (a lot of information, useful for development/testing)
+# verbose (many rarely useful info, but not a mess like the debug level)
+# notice (moderately verbose, what you want in production probably)
+# warning (only very important / critical messages are logged)
+# nothing (nothing is logged)
+loglevel notice
+
+# Specify the log file name. Also the empty string can be used to force
+# Redis to log on the standard output. Note that if you use standard
+# output for logging but daemonize, logs will be sent to /dev/null
+logfile "C:\\redis\\redis.log"
+```
+
 ##### 10. Return
-The standard way to reply 'Ok': 
+Instead of returning a string literal, the standard way to reply 'Ok': 
 ```
 redis.status_reply('Ok')
 ```
@@ -308,7 +346,7 @@ redis.error_reply('ERR My very special table error')
 
 
 #### III. Retrospection
-I am going to discuss two unique language features in Lua which are not present in modern programming languages.
+I am going to discuss two unique exoticism in Lua which are not present in modern programming languages. 
 
 ##### 1. Parallel [assignment](https://www.lua.org/manual/5.1/manual.html#2.5:~:text=2.4.3%20%E2%80%93-,Assignment,-Lua%20allows%20multiple)
 > Lua allows multiple assignments. Therefore, the syntax for assignment defines a list of variables on the left side and a list of expressions on the right side. The elements in both lists are separated by commas:
