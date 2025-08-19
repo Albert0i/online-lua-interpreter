@@ -4,6 +4,7 @@
 > "Foreverything is in a very low key there, except for the whims of the servants, ambition seeks its satisfaction in work up there, and as the work itself is what matters ambition is lost entirely, there is no room there for childish wishes."<br />The Castle by Franz Kafka
 
 #### Prologue
+This is not a *real* lua interpreter in strict sense, it is only a Lua 5.1 instance running on sandbox inside Redis Server, and therefore may subject to constraints and deficiency undocumented. The sole purpose is to learn Lua and practice interfacting with Redis. 
 
 
 #### I, Features
@@ -40,6 +41,7 @@ npm run dev
 [online demo](https://lua-interpreter.onrender.com/)
 
 [Lua Online Compiler & Interpreter](https://onecompiler.com/lua)
+
 
 #### III. Bibliography 
 1. [Redis programmability](https://redis.io/docs/latest/develop/programmability/)
