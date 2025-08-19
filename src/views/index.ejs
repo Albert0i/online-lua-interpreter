@@ -73,7 +73,7 @@
               Built with help from <a href="https://copilot.microsoft.com/" target="_blank" class="underline hover:text-blue-600">Microsoft Copilot</a>
             </p>
           </div>
-          <button type="button" onclick="window.open('https://next-methinks.vercel.app/posts/68956f9225163ad4bfc03532?_rebaseimg=true', '_blank')" class="py-1 px-3 bg-yellow-500 text-white rounded text-sm hover:bg-yellow-600">Help</button>
+          <button type="button" onclick="window.open('https://github.com/Albert0i/online-lua-interpreter/blob/main/luaPrimer.md')" class="py-1 px-3 bg-yellow-500 text-white rounded text-sm hover:bg-yellow-600">Help</button>
         </div>
       </form>
     </section>
@@ -111,8 +111,10 @@
         <!-- Output Label -->
         <h2 class="text-sm font-semibold">Output:</h2>
 
-        <!-- Expanding Output Block -->
-        <pre id="output" class="bg-white p-3 border rounded font-mono text-sm text-left whitespace-pre-wrap w-full"><%- output %></pre>
+        <!-- Expanding Output Block (red on error) -->
+        <pre id="output" class="bg-white p-3 border rounded font-mono text-sm text-left whitespace-pre-wrap w-full 
+          <%= output.toString().startsWith('Error: ERR') ? 'text-red-700' : '' %>"><%- output %>
+      </pre>
       </div>
     </div>
 
