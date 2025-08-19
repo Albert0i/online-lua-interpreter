@@ -576,6 +576,12 @@ Ideally, producer and consumer are working synchronously but in practical produc
 
 See more in [Lua Tutorial](https://youtu.be/iMacxZQMPXs)
 
+By default, Redis uses **RESP2** to communicate with clients, A call to `HGETALL` returns array of string, like so: 
+```
+id,42,name,Alberto Iong,role,admin
+```
+
+By enabling RESP3, Redis will return a javascript object. 
 `resp3.lua`
 ```
 --[[
@@ -592,9 +598,7 @@ Output:
 { id: "42", role: "admin", name: "Alberto Iong" }
 ```
 
-```
-id,42,name,Alberto Iong,role,admin
-```
+Use metatable to change the default behaviour. 
 
 `metatable.lua`
 ```
@@ -627,6 +631,8 @@ Output:
 ```
 👤 Iong [admin] [42]
 ```
+
+More on RESP3 in [alt How up Setup Redis to use RESP3 – Support Portal.pdf](./How%20up%20Setup%20Redis%20to%20use%20RESP3%20–%20Support%20Portal.pdf)
 
 
 #### IV. Bibliography 
