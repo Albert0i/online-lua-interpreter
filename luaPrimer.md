@@ -574,7 +574,7 @@ Ideally, producer and consumer are working synchronously but in practical produc
 
 > Lua is not an OOP language and it doesn't allow you to define classes but you can fake it using tables and metatables. 
 
-See more in [Lua Tutorial](https://youtu.be/iMacxZQMPXs)
+See more on [Lua Tutorial](https://youtu.be/iMacxZQMPXs)
 
 By default, Redis uses **RESP2** to communicate with clients, A call to `HGETALL` returns array of string, like so: 
 ```
@@ -632,7 +632,7 @@ Output:
 👤 Iong [admin] [42]
 ```
 
-More on RESP3 in [alt How up Setup Redis to use RESP3 – Support Portal.pdf](./How%20up%20Setup%20Redis%20to%20use%20RESP3%20–%20Support%20Portal.pdf)
+See more on [How up Setup Redis to use RESP3 – Support Portal.pdf](./How%20up%20Setup%20Redis%20to%20use%20RESP3%20–%20Support%20Portal.pdf)
 
 
 #### IV. Bibliography 
