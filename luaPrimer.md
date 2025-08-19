@@ -574,16 +574,13 @@ Ideally, producer and consumer are working synchronously but in practical produc
 
 > Lua is not an OOP language and it doesn't allow you to define classes but you can fake it using tables and metatables. 
 
-> Extends the properties and functions in another object. 
-
 See more in [Lua Tutorial](https://youtu.be/iMacxZQMPXs)
-
-```
-HSET users:001 id 42 name "Alberto Iong" role admin
-```
 
 `resp3.lua`
 ```
+--[[
+	HSET users:001 id 42 name "Alberto Iong" role admin
+]]
 redis.setresp(3)
 local user = redis.call('HGETALL', 'users:001')
 
@@ -601,15 +598,19 @@ id,42,name,Alberto Iong,role,admin
 
 `metatable.lua`
 ```
+-- Step 1: Define User prototype
 local User = {}
--- This enables method lookup
+
+-- Step 2: Custom __index function
 User.__index = function(table, key)
   return table['map'][key]
 end
--- Optional: custom string representation
+
+-- Optional method: custom string representation
 function User:__tostring()
   return "👤 " .. (self.name or "Unknown") .. " [" .. (self.role or "guest") .. "] [" .. (self.id or 'N/A') .. "]"
 end
+
 -- Constructor
 function User:new(data)
   return setmetatable(data, self)
