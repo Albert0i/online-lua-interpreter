@@ -579,10 +579,53 @@ Ideally, producer and consumer are working synchronously but in practical produc
 See more in [Lua Tutorial](https://youtu.be/iMacxZQMPXs)
 
 ```
-HSET users:001 id 42 name Iong role admin
+HSET users:001 id 42 name "Alberto Iong" role admin
 ```
 
+`resp3.lua`
+```
+redis.setresp(3)
+local user = redis.call('HGETALL', 'users:001')
 
+return user
+```
+
+Output:
+```
+{ id: "42", role: "admin", name: "Alberto Iong" }
+```
+
+```
+id,42,name,Alberto Iong,role,admin
+```
+
+`metatable.lua`
+```
+local User = {}
+-- This enables method lookup
+User.__index = function(table, key)
+  return table['map'][key]
+end
+-- Optional: custom string representation
+function User:__tostring()
+  return "👤 " .. (self.name or "Unknown") .. " [" .. (self.role or "guest") .. "] [" .. (self.id or 'N/A') .. "]"
+end
+-- Constructor
+function User:new(data)
+  return setmetatable(data, self)
+end
+
+redis.setresp(3)
+local user = User:new(redis.call('HGETALL', 'users:001'))
+
+--return user.name
+return tostring(user)
+```
+
+Output:
+```
+👤 Iong [admin] [42]
+```
 
 
 #### IV. Bibliography 
