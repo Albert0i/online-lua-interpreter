@@ -24,6 +24,7 @@ npm install
 ```
 HOST=localhost
 PORT=3000
+RESP=3
 
 REDIS_HOST=localhost
 REDIS_PORT=6379
