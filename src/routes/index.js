@@ -15,7 +15,8 @@ router.get('/', async (req, res) => {
     keys: [],
     argv:[],
     code: '',
-    output: 'Click on Run button to see the output'
+    output: 'Click on Run button to see the output', 
+    resp: process.env.RESP
   });
 });
 
@@ -44,7 +45,8 @@ router.post('/', async (req, res) => {
     keys,
     argv,
     code,
-    output: evalOutput.output
+    output: evalOutput.output,
+    resp: process.env.RESP
   })
 });
 

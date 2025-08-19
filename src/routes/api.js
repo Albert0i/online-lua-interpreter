@@ -1,7 +1,7 @@
 // routes/api.js
 import express from 'express';
 import { redis } from '../redis/redis.js'
-import { getScriptKeyName, getLastEditKey } from '../utils.js';
+import { getScriptKeyName, getLastEditKey, objectToString } from '../utils.js';
 
 const router = express.Router();
 
@@ -150,11 +150,14 @@ router.post('/eval', async (req, res) => {
       { keys: keys ? keys.split(' ') : [ ], 
         arguments: argv ? argv.split(' ') : [ ] 
       })
+    
+      // In case RESP3 is enabled. 
+    output = objectToString(output)
   } catch (err) {
     output = err.toString()
     success = false
   }
-  
+    
   return res.json({
       success,
       lastEdit: scriptName, 

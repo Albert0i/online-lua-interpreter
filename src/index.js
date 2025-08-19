@@ -24,12 +24,13 @@ app.use('/api/v1', apiRouter);
 // Start server
 const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 3000;
+const RESP = process.env.RESP || '2';
 
 await redis.connect()
-await redis.sendCommand(['HELLO', '3'])
+await redis.sendCommand(['HELLO', RESP])
 
 app.listen(PORT, () => {
-  console.log(`Server running at http://${HOST}:${PORT}`);
+  console.log(`Server running at http://${HOST}:${PORT}${ RESP==='3'? ', RESP3 is enabled' : ''}`);
 } ).on('error', (error) => {
   throw new Error(error.message)
 } );

@@ -576,8 +576,13 @@ Ideally, producer and consumer are working synchronously but in practical produc
 
 > Extends the properties and functions in another object. 
 
-
 See more in [Lua Tutorial](https://youtu.be/iMacxZQMPXs)
+
+```
+HSET users:001 id 42 name Iong role admin
+```
+
+
 
 
 #### IV. Bibliography 
