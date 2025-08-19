@@ -22,7 +22,7 @@ Lua is full of memories not because I love moon... Lua it is an artefact with pe
 > Scripts are executed in Redis by an embedded execution engine. Presently, Redis supports a single scripting engine, the [Lua 5.1](https://www.lua.org/) interpreter. Please refer to the [Redis Lua API Reference](https://redis.io/docs/latest/develop/programmability/lua-api/) page for complete documentation. 
 
 
-#### I. Content
+#### I. Introspection
 
 ##### 1. Comments 
 Before writing any code, it's crucial to know how to write comments both for mindful and mindless people. In Lua, comment has two forms: 
@@ -560,6 +560,19 @@ ret =true, consumed = 15, len = 2
 ```
 
 Ideally, producer and consumer are working synchronously but in practical producer are always faster and more than one consumers should be employed. Coroutine was once an important concept where computer was expensive and multitasking operating system was not popular. Later on coroutine was replaced by [multithreading](https://en.wikipedia.org/wiki/Multithreading_(computer_architecture)) and one has reminisced it ever since. 
+
+##### 3.[Metatables and Metamethods](https://www.lua.org/manual/5.4/manual.html#2.4:~:text=Metatables%20and%20Metamethods)
+> Every value in Lua can have a **metatable**. This **metatable** is an ordinary Lua table that defines the behavior of the original value under certain events. You can change several aspects of the behavior of a value by setting specific fields in its metatable. For instance, when a non-numeric value is the operand of an addition, Lua checks for a function in the field `__add` of the value's metatable. If it finds one, Lua calls this function to perform the addition.
+
+> The key for each event in a metatable is a string with the event name prefixed by two underscores; the corresponding value is called a **metavalue**. For most events, the metavalue must be a function, which is then called a **metamethod**. In the previous example, the key is the string "`__add`" and the metamethod is the function that performs the addition. Unless stated otherwise, a metamethod can in fact be any callable value, which is either a function or a value with a `__call` metamethod.
+
+> You can query the metatable of any value using the [getmetatable](https://www.lua.org/manual/5.4/manual.html#pdf-getmetatable) function. Lua queries metamethods in metatables using a raw access (see [rawget](https://www.lua.org/manual/5.4/manual.html#pdf-rawget)).
+
+> You can replace the metatable of tables using the [setmetatable](https://www.lua.org/manual/5.4/manual.html#pdf-setmetatable) function. You cannot change the metatable of other types from Lua code, except by using the debug library ([§6.10](https://www.lua.org/manual/5.4/manual.html#6.10)).
+
+> Tables and full userdata have individual metatables, although multiple tables and userdata can share their metatables. Values of all other types share one single metatable per type; that is, there is one single metatable for all numbers, one for all strings, etc. By default, a value has no metatable, but the string library sets a metatable for the string type (see [§6.4](https://www.lua.org/manual/5.4/manual.html#6.4)).
+
+
 
 
 #### IV. Bibliography 
