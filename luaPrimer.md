@@ -5,7 +5,7 @@
 #### Prologue
 I was much eager to obtain a good quick start guide on programming in [Lua](https://en.wikipedia.org/wiki/Lua) in Redis and it turned out I have to create my own... 
 
-Lua is full of memories not because I love moon... Lua it is an artefact with pecular language constructs which are fossil of technology evolution and stigmata from epoch elapsed. 
+Lua is full of memories not because I love moon... It is an artefact with pecular language constructs which are fossil of technology evolution and stigmata from epoch elapsed. Those treasures were buried deep in Lua, deep in Redis. 
 
 
 #### I. Brief History
@@ -570,9 +570,14 @@ Ideally, producer and consumer are working synchronously but in practical produc
 
 > You can replace the metatable of tables using the [setmetatable](https://www.lua.org/manual/5.4/manual.html#pdf-setmetatable) function. You cannot change the metatable of other types from Lua code, except by using the debug library ([§6.10](https://www.lua.org/manual/5.4/manual.html#6.10)).
 
-> Tables and full userdata have individual metatables, although multiple tables and userdata can share their metatables. Values of all other types share one single metatable per type; that is, there is one single metatable for all numbers, one for all strings, etc. By default, a value has no metatable, but the string library sets a metatable for the string type (see [§6.4](https://www.lua.org/manual/5.4/manual.html#6.4)).
+> Metatable is used to define how operations on tables should be carried out in regards to adding, subtracting, multiplying, dividing, concatenating, or comparing tables. 
+
+> Lua is not an OOP language and it doesn't allow you to define classes but you can fake it using tables and metatables. 
+
+> Extends the properties and functions in another object. 
 
 
+See more in [Lua Tutorial](https://youtu.be/iMacxZQMPXs)
 
 
 #### IV. Bibliography 
@@ -591,4 +596,4 @@ Lua borrows syntax from Modula which was descendant of the [Pascal](https://en.w
 Table, the only composite data structure, borrows from [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)) and provides unparalleled flexibility to handle structured data. 
 
 
-### EOF(2025/08/18)
+### EOF(2025/08/22)

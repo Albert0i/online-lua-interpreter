@@ -177,6 +177,7 @@
       if (dropdown && scriptNameInput) {
         dropdown.addEventListener('change', () => {
           scriptNameInput.value = dropdown.value;
+          loadBtn.focus()
         });
       } else {
         console.warn('Dropdown or textbox not found');
@@ -202,6 +203,7 @@
             output.textContent = result.message;
 
             scriptNameHidden.value = scriptName;
+            editor.focus();
           } else {
             alert(result.message || 'Failed to load script');
           }
@@ -234,6 +236,7 @@
         output.textContent = result.message;
 
         scriptNameHidden.value = scriptName;
+        editor.focus();
         } catch (err) {
           console.error('Save error:', err);
           output.textContent = 'Error saving script';
@@ -260,6 +263,7 @@
 
       const result = await res.json();
       output.textContent = result.message || 'Delete response received';
+      editor.focus();
     } catch (err) {
         console.error('Delete error:', err);
         output.textContent = 'Error deleting script';
@@ -271,6 +275,9 @@
     keys.value = '';
     argv.value = '';
     editor.value = ''; 
+    scriptNameInput.value = '';
+    scriptNameHidden.value = 'tbd.lua';
+    editor.focus();
   });    
 
   </script>
