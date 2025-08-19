@@ -151,7 +151,7 @@ router.post('/eval', async (req, res) => {
         arguments: argv ? argv.split(' ') : [ ] 
       })
     
-      // In case RESP3 is enabled. 
+    // In case RESP3 is enabled. 
     output = objectToString(output)
   } catch (err) {
     output = err.toString()

@@ -60,7 +60,10 @@
         </div>
 
         <!-- Code Editor -->
-        <textarea id="code" name="code" class="flex-grow p-2 border rounded resize-none font-mono text-sm h-64" placeholder='return "Hello Lua"' autofocus><%= code %></textarea>
+        <textarea id="code" name="code" class="flex-grow p-2 border rounded resize-none font-mono text-sm h-64" placeholder='return "Hello Lua"' autofocus required oninvalid="this.setCustomValidity('Please enter your code before submit.')"
+        oninput="this.setCustomValidity('')"
+    
+    ><%= code %></textarea>
 
         <!-- Action Buttons Row -->
         <div class="flex justify-between items-center">
