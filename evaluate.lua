@@ -1,5 +1,5 @@
 -- Optional: pretty print table
-function printTable(tbl, indent)
+local function printTable(tbl, indent)
   indent = indent or 0
   local prefix = string.rep("  ", indent)
   for k, v in pairs(tbl) do
@@ -14,7 +14,7 @@ function printTable(tbl, indent)
 end
 
 -- Optional: add space to left and right 
-function addSpaces(expr) 
+local function addSpaces(expr) 
   return (expr:gsub(">=", " >= "))
               :gsub("<=", " <= ")
               :gsub("=", " = ")
@@ -141,7 +141,7 @@ local function evaluate_rpn(record, expr_table)
 end
 
 -- Unified evaluation function
-function evaluate_record(record, expression)
+local function evaluate_record(record, expression)
   local expr_table = type(expression) == "string" and infix_to_rpn(expression) or expression
   return evaluate_rpn(record, expr_table)
 end
@@ -158,6 +158,6 @@ local row = {
 }
 
 --local expr = "( role = 'admin' and updatedAt = '' ) or name = 'alberto'"
-local expr = "(role='rookie' and updatedAt='' and email<>'') or (not (name='alberto'))"
+local expr = "(role='rookie' and updatedAt='' and email<>'') or (name='alberto')"
 
 print("Result:", evaluate_record(row, addSpaces(expr)))
