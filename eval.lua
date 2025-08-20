@@ -1,4 +1,3 @@
--- Optional: pretty print table
 local function printTable(tbl, indent)
   indent = indent or 0
   local prefix = string.rep("  ", indent)
@@ -21,30 +20,81 @@ local precedence = {
   [">="]  = { prec = 2, assoc = "left" },
   ["<="]  = { prec = 2, assoc = "left" },
   ["and"] = { prec = 1, assoc = "left" },
-  ["or"]  = { prec = 1, assoc = "left" }
+  ["or"]  = { prec = 1, assoc = "left" },
+  ["+"]   = {prec = 5, assoc = "left"},
+  ["-"]   = {prec = 5, assoc = "left"},
+  ["*"]   = {prec = 6, assoc = "left"},
+  ["/"]   = {prec = 6, assoc = "left"}
 }
 
--- Optional: add space to left and right 
-local function addSpaces(expr) 
-  return (expr:gsub(">=", " >= "))
-              :gsub("<=", " <= ")
-              :gsub("=", " = ")
-              :gsub("<>", " <> ")
-              :gsub("%(", " ( ")
-              :gsub("%)", " ) ")
-end
-
 -- Tokenizer: splits expression into tokens
-local function tokenize(expr)
-  local tokens = {}
-  for token in addSpaces(expr):gmatch("[^%s]+") do
-      table.insert(tokens, token)
+function tokenize(expr)
+    local tokens = {}
+    local i = 1
+    local len = #expr
+  
+    local function peek(n)
+      return expr:sub(i, i + (n or 0))
+    end
+  
+    local function advance(n)
+      i = i + (n or 1)
+    end
+  
+    local function skip_whitespace()
+      while i <= len and expr:sub(i, i):match("%s") do
+        advance()
+      end
+    end
+  
+    while i <= len do
+      skip_whitespace()
+      local c = peek()
+  
+      -- Parentheses
+      if c == "(" or c == ")" then
+        table.insert(tokens, c)
+        advance()
+  
+      -- Multi-char comparison operators
+      elseif peek(1) == ">=" or peek(1) == "<=" or peek(1) == "<>" then
+        table.insert(tokens, peek(1))
+        advance(2)
+  
+      -- Single-char comparison or arithmetic operators
+      elseif c == "=" or c == "<" or c == ">" or c == "+" or c == "-" or c == "*" or c == "/" then
+        table.insert(tokens, c)
+        advance()
+  
+      -- Quoted strings
+      elseif c == "'" or c == '"' then
+        local quote = c
+        local j = i + 1
+        while j <= len and expr:sub(j, j) ~= quote do
+          j = j + 1
+        end
+        local str = expr:sub(i, j)
+        table.insert(tokens, str)
+        i = j + 1
+  
+      -- Identifiers and keywords
+      elseif c:match("[%w_]") then
+        local j = i
+        while j <= len and expr:sub(j, j):match("[%w_]") do
+          j = j + 1
+        end
+        local word = expr:sub(i, j - 1)
+        table.insert(tokens, word)
+        i = j
+  
+      else
+        -- Unknown character, skip
+        advance()
+      end
+    end
+  
+    return tokens
   end
-
-  print('tokens')
-  printTable(tokens, 4)
-  return tokens
-end
 
 -- Infix to RPN using Shunting Yard algorithm
 local function infix_to_rpn(expr_str)
@@ -81,8 +131,6 @@ local function infix_to_rpn(expr_str)
     table.insert(output, table.remove(stack))
   end
 
-  print('rpn')
-  printTable(output, 4)
   return output
 end
 
@@ -102,6 +150,7 @@ end
 -- RPN evaluator
 local function evaluate_rpn(record, expr_table)
   local stack = {}
+  printTable(expr_table, 4)
   for _, token in ipairs(expr_table) do
     if token == "=" then
       local b = stripQuotes(table.remove(stack))
@@ -137,20 +186,42 @@ local function evaluate_rpn(record, expr_table)
       local a = toBoolean(table.remove(stack))
       table.insert(stack, not a)
 
+    elseif token == "+" then
+      local b = tonumber(table.remove(stack))
+      local a = tonumber(table.remove(stack))
+      table.insert(stack, a + b)
+
+    elseif token == "-" then
+      local b = tonumber(table.remove(stack))
+      local a = tonumber(table.remove(stack))
+      table.insert(stack, a - b)
+
+    elseif token == "*" then
+      local b = tonumber(table.remove(stack))
+      local a = tonumber(table.remove(stack))
+      table.insert(stack, a * b)
+
+    elseif token == "/" then
+      local b = tonumber(table.remove(stack))
+      local a = tonumber(table.remove(stack))
+      table.insert(stack, a / b)
+
     else
+      -- Push raw token (could be a literal or a key)
       table.insert(stack, token)
     end
   end
+
   return toBoolean(stack[1])
 end
 
 -- Unified evaluation function
-local function evaluate_record(record, expr_str)
-  local expr_table = type(expr_str) == "string" and infix_to_rpn(expr_str) or expr_str
-  return evaluate_rpn(record, expr_table)
-end
+-- local function evaluate_record(record, expr_str)
+--   local expr_table = type(expr_str) == "string" and infix_to_rpn(expr_str) or expr_str
+--   return evaluate_rpn(record, expr_table)
+-- end
 
--- main
+-- main 
 local row = {
   id = 42,
   name = "alberto",
@@ -161,10 +232,15 @@ local row = {
   createdAt = "2025-08-20",
   updateIdent = 0
 }
+local expr1 = "(role='admin' and updatedAt='') or (name='alberto')"
+local expr2 = "id=50 or name='albert'"
+local expr3 = "id=41"
 
---local expr = "( role = 'adminx' and updatedAt = '' ) or name = 'albert'"
---local expr = "(role='rookie' and updatedAt='' and email<>'') or (name='alberto')"
---local expr = "id>=1 and id<=40"
-local expr = "id=1"
+print("expr1 = ", expr1)
+print(evaluate_rpn(row, infix_to_rpn(expr1)))  
 
-print("Result:", evaluate_record(row, expr))
+print("expr2 = ", expr2)
+print(evaluate_rpn(row, infix_to_rpn(expr2)))
+
+print("expr3 = ", expr3)
+print(evaluate_rpn(row, infix_to_rpn(expr3)))  
