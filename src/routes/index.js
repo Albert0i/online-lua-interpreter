@@ -1,12 +1,16 @@
 // routes/index.js
 import 'dotenv/config'
 import express from 'express';
+import { getClientIp } from '../utils.js'
+
 const router = express.Router();
 
 // GET /
 router.get('/', async (req, res) => {
   const result = await fetch(`http://${process.env.HOST}:${process.env.PORT}/api/v1/scripts`)
   const data = await result.json()
+  const ip = getClientIp(req)
+  console.log('ip =', ip)
 
   res.render('index', {
     subtitle: 'A programmatic way to interact with Redis, more challenging than Redis CLI and let alone Redis Insight',

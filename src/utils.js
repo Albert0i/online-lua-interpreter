@@ -56,6 +56,20 @@ export function mySplit(input) {
     return result;
 }
 
+// Utility: Extract and normalize client IP
+export function getClientIp(req) {
+  const rawIp =
+    req.headers['x-forwarded-for']?.split(',')[0]?.trim() ||
+    req.connection?.remoteAddress ||
+    req.socket?.remoteAddress ||
+    req.connection?.socket?.remoteAddress ||
+    'unknown';
+
+  if (rawIp === '::1') return '127.0.0.1';
+  if (rawIp.startsWith('::ffff:')) return rawIp.replace('::ffff:', '');
+  return rawIp;
+}
+
 /*
 HSET OLI:scripts:init.lua code "return 'Hello Lua'" updatedAt "2025-08-12 11:02:01.769" updateIdent 0 
 HSET OLI:scripts:do_this.lua code "return 'Hello Lua'" updatedAt "2025-08-12 11:02:01.769" updateIdent 0 
