@@ -1,7 +1,7 @@
 // routes/api.js
 import express from 'express';
 import { redis } from '../redis/redis.js'
-import { getScriptKeyName, getLastEditKey, objectToString } from '../utils.js';
+import { getScriptKeyName, getLastEditKey, objectToString, mySplit } from '../utils.js';
 
 const router = express.Router();
 
@@ -147,8 +147,8 @@ router.post('/eval', async (req, res) => {
   let success = true
   try {
     output = await redis.eval(code, 
-      { keys: keys ? keys.split(' ') : [ ], 
-        arguments: argv ? argv.split(' ') : [ ] 
+      { keys: keys ? mySplit(keys) : [ ], 
+        arguments: argv ? mySplit(argv) : [ ] 
       })
     
     // In case RESP3 is enabled. 
