@@ -5,7 +5,7 @@
       ░░░██║░░░██║░░░░░██╗██║░░██║██╔══██╗
       ░░░██║░░░███████╗╚█║██████╔╝██║░░██║
       ░░░╚═╝░░░╚══════╝░╚╝╚═════╝░╚═╝░░╚═╝
-      Note: Start to read on line 214.
+      Note: Start to read on line 212.
 ]]
 -- Operator precedence and associativity
 local precedence = {
@@ -208,7 +208,7 @@ local function evaluate_rpn(record, expr_table)
 
     return toBoolean(stack[1])
 end
-  
+
 --[[
     Return Redis hashes matching a pattern and a simple condition, 
     Parameters:
@@ -230,7 +230,7 @@ local matched = {}  -- result to be returned
 local index = 1     -- index to place retrieved value
   
 repeat
-    redis.setresp(2) 
+    redis.setresp(2) -- RESP2 
     local scan = redis.call("SCAN", cursor, "MATCH", keyPrefix, "COUNT", 100, 'TYPE', 'HASH')
     -- "scan" returns [ cursor, keys ]
     cursor = scan[1]
@@ -238,7 +238,7 @@ repeat
 
     for _, key in ipairs(keys) do
         -- Get all values to evaluate 
-        redis.setresp(3)
+        redis.setresp(3) -- RESP3
         local row = redis.call("HGETALL", key)
         -- If found and evaluate to true
         if (row) and (evaluate_rpn(row, rpn)) then 
