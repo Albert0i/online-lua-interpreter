@@ -1,7 +1,7 @@
 // routes/api.js
 import express from 'express';
 import { redis } from '../redis/redis.js'
-import { getScriptKeyName, getLastEditKey, objectToString, mySplit } from '../utils.js';
+import { getScriptKeyName, getLastEditKey, objectToString, mySplit, countLines } from '../utils.js';
 
 const router = express.Router();
 
@@ -51,10 +51,11 @@ router.get('/load', async (req, res) => {
     });
   }
 
+  const code = await redis.hGet(getScriptKeyName(scriptName), 'code')
   return res.json({
       success: true,
-      code: await redis.hGet(getScriptKeyName(scriptName), 'code'),
-      message: `${scriptName} loaded`
+      code,
+      message: `${scriptName} loaded, ${countLines(code)} lines.`
   });
 });
 
@@ -104,7 +105,7 @@ router.put('/save', async (req, res) => {
 
       return res.json({
       success: true,
-      message: `${scriptName} saved`
+      message: `${scriptName} saved, ${countLines(code)} lines.`
     });    
   }
 });
