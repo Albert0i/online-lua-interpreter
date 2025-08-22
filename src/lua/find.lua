@@ -14,12 +14,14 @@ local precedence = {
     ["<>"]  = { prec = 2, assoc = "left" },
     [">="]  = { prec = 2, assoc = "left" },
     ["<="]  = { prec = 2, assoc = "left" },
+    [">"]  = { prec = 2, assoc = "left" },
+    ["<"]  = { prec = 2, assoc = "left" },
     ["and"] = { prec = 1, assoc = "left" },
     ["or"]  = { prec = 1, assoc = "left" },
     ["+"]   = {prec = 5, assoc = "left"},
     ["-"]   = {prec = 5, assoc = "left"},
     ["*"]   = {prec = 6, assoc = "left"},
-    ["/"]   = {prec = 6, assoc = "left"}
+    ["/"]   = {prec = 6, assoc = "left"},    
 }
   
 -- Tokenizer: splits expression into tokens
@@ -165,6 +167,16 @@ local function evaluate_rpn(record, expr_table)
             local b = tonumber(stripQuotes(table.remove(stack)))
             local a = tonumber(record['map'][table.remove(stack)])
             table.insert(stack, a <= b)
+
+        elseif token == ">" then
+            local b = tonumber(stripQuotes(table.remove(stack)))
+            local a = tonumber(record['map'][table.remove(stack)])
+            table.insert(stack, a > b)
+
+        elseif token == "<" then
+            local b = tonumber(stripQuotes(table.remove(stack)))
+            local a = tonumber(record['map'][table.remove(stack)])
+            table.insert(stack, a < b)
 
         elseif token == "and" then
             local b = toBoolean(table.remove(stack))
