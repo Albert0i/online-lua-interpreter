@@ -234,14 +234,7 @@ local function find(KEYS, ARGV)
     end
     
     --[[
-        Return Redis hashes matching a pattern and a simple condition, 
-        Parameters:
-            KEYS[1] - Key pattern to scan for, "users:*";
-            KEYS[2] - Expression to evaluate for, "role='admin' and status='inactive'";
-            KEYS[3] - Number of documents to skip, 0 if unspecified; 
-            KEYS[4] - Maximum number of documents to return, 10 if unspecified; 
-            ARGV[]  - Fields to return, "id name status" for example, 
-                      Return all fields if unspecified.
+        main 
     ]]
     local keyPrefix = KEYS[1] or "*"
     local expr1 = KEYS[2] or "1"
