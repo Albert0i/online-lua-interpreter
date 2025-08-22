@@ -1,7 +1,7 @@
 // routes/api.js
 import express from 'express';
 import { redis } from '../redis/redis.js'
-import { getScriptKeyName, getLastEditKey, objectToString, mySplit, countLines } from '../utils.js';
+import { getScriptKeyName, getLastEditKey, objectToString, mySplit, countWords, countLines } from '../utils.js';
 
 const router = express.Router();
 
@@ -55,7 +55,7 @@ router.get('/load', async (req, res) => {
   return res.json({
       success: true,
       code,
-      message: `${scriptName} loaded, ${countLines(code)} lines.`
+      message: `${scriptName} loaded, ${countWords(code)} words in ${countLines(code)} lines.`
   });
 });
 
@@ -105,7 +105,7 @@ router.put('/save', async (req, res) => {
 
       return res.json({
       success: true,
-      message: `${scriptName} saved, ${countLines(code)} lines.`
+      message: `${scriptName} saved, ${countWords(code)} words in ${countLines(code)} lines.`
     });    
   }
 });

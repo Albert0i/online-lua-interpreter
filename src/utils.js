@@ -75,6 +75,14 @@ export function countLines(str) {
   return str.split(/\r\n|\r|\n/).length;
 }
 
+export function countWords(str) {
+  if (!str) return 0;
+  return str
+    .split(/\s+/)           // Split by any whitespace (spaces, tabs, newlines)
+    .filter(Boolean)        // Remove empty strings
+    .length;
+}
+
 /*
 HSET OLI:scripts:init.lua code "return 'Hello Lua'" updatedAt "2025-08-12 11:02:01.769" updateIdent 0 
 HSET OLI:scripts:do_this.lua code "return 'Hello Lua'" updatedAt "2025-08-12 11:02:01.769" updateIdent 0 
