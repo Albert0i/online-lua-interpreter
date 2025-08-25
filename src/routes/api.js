@@ -45,7 +45,7 @@ router.get('/scripts', async (req, res) => {
 router.get('/load', async (req, res) => {
   const scriptName = req.query.name;
 
-  console.log('LOAD, scriptName =', scriptName)
+  //console.log('LOAD, scriptName =', scriptName)
   if (!scriptName) {
     return res.status(400).json({
       success: false,
@@ -69,7 +69,7 @@ router.put('/save', async (req, res) => {
   const now = new Date(); 
   const isoDate = now.toISOString(); 
 
-  console.log('SAVE, scriptName =', scriptName)
+  //console.log('SAVE, scriptName =', scriptName)
   if (!scriptName || !code ) {
     return res.status(400).json({
       success: false,
@@ -117,7 +117,7 @@ router.put('/save', async (req, res) => {
 router.delete('/delete', async (req, res) => {
   const scriptName = req.query.name;
 
-  console.log('DELETE, scriptName =', scriptName)
+  //console.log('DELETE, scriptName =', scriptName)
   if (!scriptName ) {
     return res.status(400).json({
       success: false,
@@ -186,35 +186,3 @@ router.post('/eval', async (req, res) => {
   });
 
 export default router;
-
-/*
-router.put('/save', async (req, res) => {
-  const scriptName = req.body.name;
-  const code = req.body.code;
-
-  const now = new Date(); 
-  const isoDate = now.toISOString(); 
-
-  if (!scriptName || !code ) {
-    return res.status(400).json({
-      success: false,
-      message: 'Missing Script name and/or code'
-    });
-  }
-
-  await redis.multi()
-             .hSet(getScriptKeyName(scriptName), { 
-                name: scriptName, 
-                code,
-                updatedAt: isoDate,
-             })
-             .hIncrBy(getScriptKeyName(scriptName), 'updateIdent', 1)
-             .set(getLastEditKey(), scriptName)
-             .exec()
-
-  return res.json({
-      success: true,
-      message: `${scriptName} saved`
-    });
-  });
-*/
