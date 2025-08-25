@@ -111,11 +111,12 @@
 
       <!-- Output section grows with content -->
       <div class="flex flex-col p-1 space-y-2">
-        <!-- Output Label -->
-        <h2 class="text-sm font-semibold">Output:</h2>
 
         <!-- Multi-format support -->
         <% if (lastEdit.endsWith('.lua')) { %> 
+          <!-- Output Label -->
+          <h2 class="text-sm font-semibold">Output:</h2>
+
           <!-- Expanding Output Block (red on error) -->
           <pre id="output" class="bg-white p-3 border rounded font-mono text-sm text-left whitespace-pre-wrap w-full 
             <%= output.toString().startsWith('Error: ERR') ? 'text-red-700' : '' %>"><%- output %></pre>
