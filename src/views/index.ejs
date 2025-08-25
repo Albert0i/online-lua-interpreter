@@ -122,7 +122,14 @@
             <%= output.toString().startsWith('Error: ERR') ? 'text-red-700' : '' %>"><%- output %></pre>
           <% } else { %>  
             <div id="outputMD" class="raw-html">
-              <%- output %>
+              <% if (previewUrl) { %>
+                <div style="text-align: right; font-size: 0.8rem;">
+                  <a href="<%= previewUrl %>" target="_blank" rel="noopener noreferrer">
+                    open in fullscreen
+                  </a>
+                </div>  
+              <% } %>  
+              <%- output %>            
             </div> 
         <% } %>  
 

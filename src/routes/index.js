@@ -20,7 +20,8 @@ router.get('/', async (req, res) => {
     argv:[],
     code: '',
     output: 'Click on Run button to see the output', 
-    resp: process.env.RESP
+    resp: process.env.RESP,
+    previewUrl: undefined
   });
 });
 
@@ -41,7 +42,8 @@ router.post('/', async (req, res) => {
     } )
 
   const evalOutput = await evalResult.json()
-
+  const previewUrl = `${req.protocol}://${req.get('host')}${req.originalUrl}${nameHidden}`;
+  console.log('previewUrl =', previewUrl)
   res.render('index', {
     subtitle: 'A difficult way to interact with Redis, more harsh than Redis CLI, I assure, and let alone Redis Insight',
     scripts: data.scripts, 
@@ -50,7 +52,8 @@ router.post('/', async (req, res) => {
     argv,
     code,
     output: evalOutput.output,
-    resp: process.env.RESP
+    resp: process.env.RESP,
+    previewUrl
   })
 });
 
