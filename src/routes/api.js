@@ -1,6 +1,7 @@
 // routes/api.js
 import express from 'express';
 import { redis } from '../redis/redis.js'
+import MarkdownIt from 'markdown-it';
 import { getScriptKeyName, getLastEditKey, objectToString, mySplit, countWords, countLines } from '../utils.js';
 
 const router = express.Router();
@@ -146,19 +147,33 @@ router.post('/eval', async (req, res) => {
 
   let output = ""
   let success = true
-  try {
-    output = await redis.eval(code, 
-      { keys: keys ? mySplit(keys) : [ ], 
-        arguments: argv ? mySplit(argv) : [ ] 
-      })
-    
-    // In case RESP3 is enabled. 
-    output = objectToString(output)
-  } catch (err) {
-    output = err.toString()
-    success = false
+
+  // Multi-format support
+  if (scriptName.endsWith('.lua')) {
+      try {
+        output = await redis.eval(code, 
+          { keys: keys ? mySplit(keys) : [ ], 
+            arguments: argv ? mySplit(argv) : [ ] 
+          })
+        
+        // In case RESP3 is enabled. 
+        output = objectToString(output)
+      } catch (err) {
+        output = err.toString()
+        success = false
+      }
+  } else if (scriptName.endsWith('.md')) {
+    const md = new MarkdownIt({
+      html: true,
+      linkify: true,
+      typographer: true
+    });
+    output = md.render(code);
+  } else {
+    // Leave it as it is...
+    output = code 
   }
-    
+  
   return res.json({
       success,
       lastEdit: scriptName, 

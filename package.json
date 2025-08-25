@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/index.js", 
+    "dev": "nodemon src/index.js",
     "load": "node src/loader.js"
   },
   "repository": {
@@ -24,6 +24,7 @@
     "dotenv": "^17.2.1",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
+    "markdown-it": "^14.1.0",
     "redis": "^5.8.0"
   }
 }
