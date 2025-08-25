@@ -43,7 +43,7 @@ router.post('/', async (req, res) => {
 
   const evalOutput = await evalResult.json()
   const previewUrl = `${req.protocol}://${req.get('host')}${req.originalUrl}${nameHidden}`;
-  console.log('previewUrl =', previewUrl)
+  
   res.render('index', {
     subtitle: 'A difficult way to interact with Redis, more harsh than Redis CLI, I assure, and let alone Redis Insight',
     scripts: data.scripts, 

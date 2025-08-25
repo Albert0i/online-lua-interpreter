@@ -4,7 +4,6 @@ import { getScriptKeyName } from '../utils.js'
 import MarkdownIt from 'markdown-it';
 
 const router = express.Router();
-const md = new MarkdownIt();
 
 router.get('/:filename', async (req, res) => {
   const { filename } = req.params;
@@ -14,8 +13,13 @@ router.get('/:filename', async (req, res) => {
   }
 
   const key = getScriptKeyName(filename);
-  console.log('key =', key)
+  //console.log('key =', key)
   try {
+    const md = new MarkdownIt({
+        html: true,
+        linkify: true,
+        typographer: true
+      });
     const markdown = await redis.hGet(key, 'code');
 
     if (!markdown) {
