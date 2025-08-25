@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
   res.render('index', {
     subtitle: 'A programmatic way to interact with Redis, more challenging than Redis CLI and let alone Redis Insight',
     scripts: data.scripts, 
-    lastEdit: data.lastEdit,
+    lastEdit: data.lastEdit || 'noname.lua',
     keys: [],
     argv:[],
     code: '',

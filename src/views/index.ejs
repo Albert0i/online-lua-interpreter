@@ -12,6 +12,9 @@
     .no-select {
       user-select: none;
     }
+    .raw-html * {
+      all: revert;
+    }
   </style>
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
 </head>
@@ -111,10 +114,17 @@
         <!-- Output Label -->
         <h2 class="text-sm font-semibold">Output:</h2>
 
-        <!-- Expanding Output Block (red on error) -->
-        <pre id="output" class="bg-white p-3 border rounded font-mono text-sm text-left whitespace-pre-wrap w-full 
-          <%= output.toString().startsWith('Error: ERR') ? 'text-red-700' : '' %>"><%- output %>
-      </pre>
+        <!-- Multi-format support -->
+        <% if (lastEdit.endsWith('.lua')) { %> 
+          <!-- Expanding Output Block (red on error) -->
+          <pre id="output" class="bg-white p-3 border rounded font-mono text-sm text-left whitespace-pre-wrap w-full 
+            <%= output.toString().startsWith('Error: ERR') ? 'text-red-700' : '' %>"><%- output %></pre>
+          <% } else { %>  
+            <div class="raw-html">
+              <%- output %>
+            </div> 
+        <% } %>  
+
       </div>
     </div>
 
@@ -276,10 +286,15 @@
     argv.value = '';
     editor.value = ''; 
     scriptNameInput.value = '';
-    scriptNameHidden.value = 'tbd.lua';
+    scriptNameHidden.value = 'noname.lua';
     editor.focus();
   });    
 
+  // Handle scriptName changed
+  scriptNameInput.addEventListener('input', () => {
+    scriptNameHidden.value = scriptNameInput.value;
+  });
+  
   </script>
 
 </body>

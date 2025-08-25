@@ -164,14 +164,14 @@ router.post('/eval', async (req, res) => {
       }
   } else if (scriptName.endsWith('.md')) {
     const md = new MarkdownIt({
-      html: true,
-      linkify: true,
-      typographer: true
-    });
-    output = md.render(code);
+        html: true,
+        linkify: true,
+        typographer: true
+      });
+      output = md.render(code);
   } else {
-    // Leave it as it is...
-    output = code 
+      // Leave it as it is...
+      output = code 
   }
   
   return res.json({
