@@ -4,6 +4,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import indexRouter from './routes/index.js';
 import apiRouter from './routes/api.js';
+import imgRoute from './routes/imgroute.js';
+import mdRoute from './routes/mdroute.js';
 import { redis } from './redis/redis.js'
 
 const __filename = fileURLToPath(import.meta.url);
@@ -19,7 +21,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use('/', indexRouter);
+app.use('/', mdRoute);
 app.use('/api/v1', apiRouter);
+app.use('/img', imgRoute);
 
 // Start server
 const HOST = process.env.HOST || 'localhost';

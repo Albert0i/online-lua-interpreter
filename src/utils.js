@@ -10,6 +10,11 @@ export function getLastEditKey() {
     return `${nameSpace}lastEdit`
 }
 
+export function getImageKeyName(id)
+{
+    return `${nameSpace}images:${id}`
+}
+
 export function objectToString(obj) {
     if (
       typeof obj === 'object' &&

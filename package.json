@@ -7,7 +7,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/index.js",
-    "load": "node src/loader.js"
+    "load": "node src/loader.js", 
+    "imgload": "node src/imgloader.js"
   },
   "repository": {
     "type": "git",
