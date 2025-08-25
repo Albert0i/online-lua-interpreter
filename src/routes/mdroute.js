@@ -63,23 +63,26 @@ router.get('/:filename', async (req, res) => {
                 margin: 0.5rem 0;
             }
             pre {
-                background-color: #f6f8fa;
-                border: 1px solid #d0d7de;
-                border-radius: 6px;
-                padding: 1rem;
-                overflow-x: auto;
-                font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
-                font-size: 16px;
-                line-height: 1.45;
-                color: #000000;
+            background-color: #f6f8fa;
+            border: 1px solid #d0d7de;
+            border-radius: 6px;
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 16px;
+            line-height: 1.45;
+            color: #000000;
+            text-align: left;         /* 👈 Ensures left alignment */
+            white-space: pre-wrap;    /* 👈 Wrap long lines if needed */
             }
             code {
-                background-color: rgba(27,31,35,0.07);
-                padding: 0.2em 0.4em;
-                border-radius: 3px;
-                font-size: 95%;
-                font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
-                color: #000000;
+            background-color: rgba(27,31,35,0.07);
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-size: 95%;
+            font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+            color: #000000;
+            text-align: left;         /* 👈 Ensures inline code stays left-aligned */
             }
             blockquote {
                 margin: 1rem 0;
