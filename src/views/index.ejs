@@ -120,7 +120,7 @@
           <pre id="output" class="bg-white p-3 border rounded font-mono text-sm text-left whitespace-pre-wrap w-full 
             <%= output.toString().startsWith('Error: ERR') ? 'text-red-700' : '' %>"><%- output %></pre>
           <% } else { %>  
-            <div class="raw-html">
+            <div id="outputMD" class="raw-html">
               <%- output %>
             </div> 
         <% } %>  
@@ -181,13 +181,16 @@
     const resetBtn = document.getElementById('resetBtn');
 
     const output = document.getElementById('output');
+    const outputMD = document.getElementById('outputMD');
 
     // Handle dropdown change 
     document.addEventListener('DOMContentLoaded', () => {
       if (dropdown && scriptNameInput) {
         dropdown.addEventListener('change', () => {
           scriptNameInput.value = dropdown.value;
+          scriptNameHidden.value = dropdown.value;
           loadBtn.focus()
+          console.log('scriptName = ', dropdown.value)
         });
       } else {
         console.warn('Dropdown or textbox not found');
@@ -210,7 +213,15 @@
 
           if (result.success) {
             editor.value = result.code; // for <textarea>
-            output.textContent = result.message;
+            
+            // Multi-format support
+            if (output) {
+              output.textContent = result.message;
+            } else if (outputMD) {
+              outputMD.textContent = result.message;
+            } else {
+              //...
+            }
 
             scriptNameHidden.value = scriptName;
             editor.focus();

@@ -45,6 +45,7 @@ router.get('/scripts', async (req, res) => {
 router.get('/load', async (req, res) => {
   const scriptName = req.query.name;
 
+  console.log('LOAD, scriptName =', scriptName)
   if (!scriptName) {
     return res.status(400).json({
       success: false,
@@ -68,6 +69,7 @@ router.put('/save', async (req, res) => {
   const now = new Date(); 
   const isoDate = now.toISOString(); 
 
+  console.log('SAVE, scriptName =', scriptName)
   if (!scriptName || !code ) {
     return res.status(400).json({
       success: false,
@@ -115,6 +117,7 @@ router.put('/save', async (req, res) => {
 router.delete('/delete', async (req, res) => {
   const scriptName = req.query.name;
 
+  console.log('DELETE, scriptName =', scriptName)
   if (!scriptName ) {
     return res.status(400).json({
       success: false,
@@ -137,7 +140,7 @@ router.post('/eval', async (req, res) => {
   const code = req.body.code;
   const scriptName = req.body.name;
 
-  console.log('scriptName =', scriptName)
+  console.log('EVAL, scriptName =', scriptName)
   if (!scriptName || !code ) {
     return res.status(400).json({
       success: false,
