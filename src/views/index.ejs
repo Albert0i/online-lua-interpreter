@@ -308,7 +308,8 @@
     });
 
   // Handle save script 
-  document.addEventListener('DOMContentLoaded', () => {
+  if (saveBtn) {
+    document.addEventListener('DOMContentLoaded', () => {
     saveBtn.addEventListener('click', async (e) => {
       const scriptName = scriptNameInput.value.trim();
       const code = editor.value.trim();
@@ -336,9 +337,11 @@
         }
       });
     });
+  }
 
   // Handle delete script 
-  deleteBtn.addEventListener('click', async (e) => {
+  if (deleteBtn) {
+    deleteBtn.addEventListener('click', async (e) => {
     const scriptName = scriptNameInput.value.trim();
 
     if (!scriptName) {
@@ -363,6 +366,7 @@
         outputMessage('Error deleting script');
       }
     });
+  }
 
   // Handle reset script
   resetBtn.addEventListener('click', async (e) => {
