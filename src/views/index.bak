@@ -138,38 +138,12 @@
 
   </main>
 
-  <script>    
-    // ✅ Updated Script with Cookie Persistence
+  <script>
+    // Drag Script + Tab Support
     const divider = document.getElementById('verticalDivider');
     const editorPanel = document.getElementById('editorPanel');
     const outputPanel = document.getElementById('outputPanel');
-    const COOKIE_SPLITTER_NAME = "OLI_splitterPosition"
 
-    // 🧠 Cookie Helpers
-    function setCookie(name, value, days = 365) {
-      const expires = new Date(Date.now() + days * 864e5).toUTCString();
-      document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
-    }
-
-    function getCookie(name) {
-      const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-      return match ? decodeURIComponent(match[2]) : null;
-    }
-
-    function deleteCookie(name) {
-      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
-    }
-
-    // 🪄 Apply saved position on load
-    const savedPos = getCookie(COOKIE_SPLITTER_NAME);
-    if (savedPos !== null) {
-      const leftWidth = parseFloat(savedPos);
-      editorPanel.style.width = `${leftWidth}%`;
-      outputPanel.style.width = `${100 - leftWidth}%`;
-      divider.style.left = `${leftWidth}%`;
-    }
-
-    // 🖱️ Drag Logic
     divider.addEventListener('mousedown', function (e) {
       e.preventDefault();
       document.addEventListener('mousemove', resizePanels);
@@ -187,8 +161,6 @@
     function stopResize() {
       document.removeEventListener('mousemove', resizePanels);
       document.removeEventListener('mouseup', stopResize);
-      const leftWidth = parseFloat(editorPanel.style.width);
-      setCookie(COOKIE_SPLITTER_NAME, leftWidth);
     }
 
     // Tab support in textarea
@@ -218,35 +190,6 @@
 
     const output = document.getElementById('output');
     const outputMD = document.getElementById('outputMD');
-
-    // ✅ JavaScript: Drag-and-Drop File Loader
-    // 🛡️ Prevent default drag behaviors
-    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-      editor.addEventListener(eventName, e => e.preventDefault());
-    });
-
-    // 🎯 Highlight on drag
-    editor.addEventListener('dragover', () => {
-      editor.classList.add('border-blue-500');
-    });
-    editor.addEventListener('dragleave', () => {
-      editor.classList.remove('border-blue-500');
-    });
-
-    // 📦 Handle file drop
-    editor.addEventListener('drop', e => {
-      editor.classList.remove('border-blue-500');
-      const file = e.dataTransfer.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function (event) {
-        editor.value = event.target.result;
-        scriptNameInput.value = file.name;
-        scriptNameHidden.value = file.name;
-      };
-      reader.readAsText(file);
-    });
 
     // Handle dropdown change 
     document.addEventListener('DOMContentLoaded', () => {
@@ -365,10 +308,9 @@
     keys.value = '';
     argv.value = '';
     editor.value = ''; 
-    scriptNameInput.value = 'noname.lua';
+    scriptNameInput.value = '';
     scriptNameHidden.value = 'noname.lua';
     editor.focus();
-    deleteCookie(COOKIE_SPLITTER_NAME)
   });    
 
   // Handle scriptName changed
