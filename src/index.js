@@ -2,6 +2,7 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import cookieParser from 'cookie-parser';
 import indexRouter from './routes/index.js';
 import apiRouter from './routes/api.js';
 import imgRoute from './routes/imgroute.js';
@@ -19,6 +20,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cookieParser());
 
 app.use('/', indexRouter);
 app.use('/', mdRoute);

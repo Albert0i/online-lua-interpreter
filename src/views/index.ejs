@@ -91,7 +91,7 @@
 
       <!-- Script Toolbar -->
       <div class="flex items-center space-x-2">
-        <select name="scriptSelect" id="scriptSelect" class="border rounded px-2 py-1 text-sm">
+        <select name="scriptSelect" id="scriptSelect" class="border rounded px-2 py-1 flex-grow text-sm">
           <option value="">Select</option>
           <% scripts.forEach(script => { %>
             <option value="<%= script %>" <%= script === lastEdit ? 'selected' : '' %>><%= script %></option>
@@ -101,8 +101,12 @@
         <input type="text" name="scriptName" id="scriptName" value="<%= lastEdit %>" placeholder="Script Name" class="border rounded px-2 py-1 flex-grow text-sm w-24" />
 
         <button type="button" id="loadBtn" class="px-3 py-1 bg-gray-300 rounded text-sm hover:bg-gray-400">Load</button>
-        <button type="button" id="saveBtn" class="px-3 py-1 bg-green-500 text-white rounded text-sm hover:bg-green-600">Save</button>
-        <button type="button" id="deleteBtn" class="px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600">Delete</button>
+
+        <% if(auth) {  %> 
+          <button type="button" id="saveBtn" class="px-3 py-1 bg-green-500 text-white rounded text-sm hover:bg-green-600">Save</button>
+          <button type="button" id="deleteBtn" class="px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600">Delete</button>
+        <% } %>
+
       </div>
 
     <!-- Output Section -->
