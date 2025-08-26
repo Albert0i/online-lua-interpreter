@@ -161,7 +161,10 @@
     }
 
     function deleteCookie(name) {
+      // For development environment 
       document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
+
+      // For production environment, must specify domain to delete cookie!!!
       document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=lua-interpreter.onrender.com`;
     }
 
