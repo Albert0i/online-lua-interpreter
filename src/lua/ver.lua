@@ -1,6 +1,6 @@
 --[[
-	Small script to return Redis Version
-    Parameters: None
+	Small script to return Redis and Lua Version
+	Parameters: None
 ]]
 
-return redis.REDIS_VERSION
+return 'Redis '..redis.REDIS_VERSION..' / '.._G["_VERSION"]
