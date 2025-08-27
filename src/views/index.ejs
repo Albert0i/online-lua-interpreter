@@ -144,7 +144,7 @@
         <div id="consoleMeta" class="mt-2 text-xs text-black font-mono">
           <% if (meta.time) { %>
             Executed in <%= meta.time %><br>
-            Timestamp: <%= new Date(meta.timestamp).toISOString().replace('T', ' ').slice(0, 19).replace(/-/g, '/') %>
+            Timestamp: <%= new Date(new Date(meta.timestamp).getTime() + 8 * 3600000).toISOString().replace('T', ' ').slice(0, 19).replace(/-/g, '/') %>
             <div>
               <button onclick="copyOutput()" class="px-3 py-1 bg-sky-600 hover:bg-sky-700 hover:font-bold text-white rounded-full text-xs w-28">
                 Copy Output
