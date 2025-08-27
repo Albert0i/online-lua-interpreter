@@ -232,7 +232,7 @@ router.get('/runtime', async (req, res) => {
       for k, v in pairs(_G) do
         local t = type(v)
         if t=="table" then 
-          table.insert(result, t .. " " .. k.." ["..countTable(v).."]")
+          table.insert(result, t .. " <strong>" ..k.."</strong> ["..countTable(v).."]")
 
           for k2, v2 in pairs(v) do 
             local t2 = type(v2)
