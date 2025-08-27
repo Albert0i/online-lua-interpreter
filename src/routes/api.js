@@ -190,15 +190,112 @@ router.get('/runtime', async (req, res) => {
     res.json(output);
   });
 
-  // https://dev.fandom.com/wiki/Lua_reference_manual/Standard_libraries#pairs
-  // https://dev.fandom.com/wiki/Lua_reference_manual/Standard_libraries#table.insert
+// https://dev.fandom.com/wiki/Lua_reference_manual/Standard_libraries#pairs
+// https://dev.fandom.com/wiki/Lua_reference_manual/Standard_libraries#table.insert
 
-  // https://redis.io/docs/latest/develop/programmability/lua-api/#:~:text=redis.setresp
-  // https://redis.io/docs/latest/develop/programmability/lua-api/#:~:text=redis.setresp
+// https://redis.io/docs/latest/develop/programmability/lua-api/#:~:text=redis.setresp
+// https://redis.io/docs/latest/develop/programmability/lua-api/#:~:text=redis.setresp
+
+const inspectorScript = `
+      local libs = { redis=true, struct=true, cjson=true, cmsgpack=true, bitop=true, bit=true }
+      local fandomUrl = 'https://dev.fandom.com/wiki/Lua_reference_manual/Standard_libraries#'
+      local redisUrl = 'https://redis.io/docs/latest/develop/programmability/lua-api/#:~:text='
+      local coroutineUrl = 'https://www.lua.org/manual/5.1/manual.html#5.2/#:~:text='
+      local result = {}
+
+      local function countTable(tbl)
+        local count = 0
+        for _ in pairs(tbl) do
+          count = count + 1
+        end
+        return count
+      end
+
+      local function makeLink(lib, keyword)
+        if lib == "coroutine" then 
+          return "<a href='"..coroutineUrl..keyword.."' target=_blank>"..keyword.."</a>"
+        elseif libs[lib] then 
+          return "<a href='"..redisUrl..keyword.."' target=_blank>"..keyword.."</a>"
+        else 
+          return "<a href='"..fandomUrl..keyword.."' target=_blank>"..keyword.."</a>"
+        end 
+      end 
+
+      local function addEntry(lib, key, value, indent) 
+        local t = type(value)
+        local fullKey = key
+        if (lib) then 
+          fullKey = lib.."."..key
+        end 
+
+        if t == "string" then 
+          table.insert(result, string.rep("\t", indent)..t.." "..fullKey.." = '"..value.."'") 
+        elseif t == "number" then 
+          table.insert(result, string.rep("\t", indent)..t.." "..fullKey.." = "..tostring(value)) 
+        elseif t == "function" then 
+          table.insert(result, string.rep("\t", indent)..t.." "..makeLink(lib, fullKey)) 
+        elseif t == "table" then 
+          if indent == 0 then
+            table.insert(result, string.rep("\t", indent)..t.." <strong>"..fullKey.."</strong> ["..countTable(value).."]")        
+          else 
+            table.insert(result, string.rep("\t", indent)..t.." "..fullKey.." ["..countTable(value).."]")        
+          end 
+        else
+          table.insert(result, string.rep("\t", indent).."type = "..t..", lib = "..lib..", key = "..key..", value = "..tostring(value)) 
+        end 
+      end 
+
+      --[[ 
+          main 
+      ]]
+      -- string and number
+      for k, v in pairs(_G) do
+        local t = type(v)
+
+        if t=="string" or t=="number" then 
+          addEntry(nil, k, v, 0)
+        end 
+      end
+
+      -- function
+      for k, v in pairs(_G) do
+        local t = type(v)
+
+        if t=="function" then 
+          addEntry(nil, k, v, 0)
+        end 
+      end
+
+      -- table
+      for k, v in pairs(_G) do
+        local t = type(v)
+
+        if t=="table" and k ~="_G" then 
+          addEntry(nil, k, v, 0)
+
+          for k1, v1 in pairs(v) do 
+            local t1 = type(v1)
+
+            if k1 ~= "__index" then
+              addEntry(k, k1, v1, 1)
+              -- table within table... 
+              if t1=="table" then
+                for k2, v2 in pairs(v1) do 
+                  addEntry(k.."."..k1, k2, v2, 2)
+                end
+              end 
+            end
+
+          end 
+        end 
+      end
+
+      return result
+    `;  
+
+export default router;
+
 /*
-{ "redis", "struct", "cjson", "cmsgpack", "bitop" }
-*/
-
   const inspectorScript = `
       local libs = { redis=true, struct=true, cjson=true, cmsgpack=true, bitop=true, bit=true }
       local fandomUrl = 'https://dev.fandom.com/wiki/Lua_reference_manual/Standard_libraries#'
@@ -266,5 +363,4 @@ router.get('/runtime', async (req, res) => {
       end
       return result
     `;  
-
-export default router;
+*/
