@@ -23,7 +23,8 @@ router.get('/', async (req, res) => {
     output: 'Click on Run button to see the output', 
     resp: process.env.RESP,
     previewUrl: undefined,
-    auth: authCookie
+    auth: authCookie,
+    meta: { }
   });
 });
 
@@ -57,7 +58,8 @@ router.post('/', async (req, res) => {
     output: evalOutput.output,
     resp: process.env.RESP,
     previewUrl,
-    auth: authCookie
+    auth: authCookie,
+    meta: evalOutput.meta
   })
 });
 

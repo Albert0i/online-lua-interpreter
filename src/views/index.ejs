@@ -141,6 +141,18 @@
             </div> 
         <% } %>  
 
+        <div id="consoleMeta" class="mt-2 text-xs text-black font-mono">
+          <% if (meta.time) { %>
+            Executed in <%= meta.time %><br>
+            Timestamp: <%= new Date(meta.timestamp).toISOString().replace('T', ' ').slice(0, 19).replace(/-/g, '/') %>
+            <div>
+              <button onclick="copyOutput()" class="px-3 py-1 bg-sky-600 hover:bg-sky-700 hover:font-bold text-white rounded-full text-xs w-28">
+                Copy Output
+              </button>
+          </div>              
+          <% } %>
+        </div>
+
         <div class="mt-2">
           <button onclick="toggleRuntimeInspector()" class="px-3 py-1 bg-cyan-700 hover:bg-cyan-800 hover:font-bold text-white rounded-full text-xs w-32">Runtime Inspector</button>
           <div id="runtimeInspector" class="runtime-inspector hidden mt-2 p-2 border rounded bg-gray-100 font-mono text-sm">
@@ -310,7 +322,8 @@
             outputMessage(result.message)
 
             scriptNameHidden.value = scriptName;
-            editor.focus();
+            clearConsoleMeta()
+            editor.focus();            
           } else {
             alert(result.message || 'Failed to load script');
           }
@@ -344,6 +357,7 @@
         outputMessage(result.message)        
 
         scriptNameHidden.value = scriptName;
+        clearConsoleMeta()
         editor.focus();
         } catch (err) {
           console.error('Save error:', err);
@@ -374,6 +388,7 @@
       //output.textContent = result.message || 'Delete response received';
       // Multi-format support
       outputMessage(result.message || 'Delete response received') 
+      clearConsoleMeta()
       editor.focus();
     } catch (err) {
         console.error('Delete error:', err);
@@ -391,6 +406,7 @@
     scriptNameHidden.value = 'noname.lua';
     editor.focus();
     deleteCookie(COOKIE_SPLITTER_NAME)
+    clearConsoleMeta()
   });    
 
   // Handle scriptName changed
@@ -411,6 +427,19 @@
         });
     }
     }
+
+  function clearConsoleMeta() {
+    document.getElementById('consoleMeta').innerHTML = '';
+  }
+
+  function copyOutput() {
+    navigator.clipboard.writeText(output.innerText).then(() => {
+      console.log('Output copied to clipboard');
+    }).catch(err => {
+      console.error('Failed to copy output:', err);
+    });
+  }
+
   </script>
 
 </body>

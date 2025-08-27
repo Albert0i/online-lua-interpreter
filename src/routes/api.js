@@ -150,6 +150,7 @@ router.post('/eval', async (req, res) => {
 
   let output = ""
   let success = true
+  const start = Date.now();
 
   // Multi-format support
   if (scriptName.endsWith('.lua')) {
@@ -176,12 +177,17 @@ router.post('/eval', async (req, res) => {
       // Leave it as it is...
       output = code 
   }
-  
+  const duration = Date.now() - start;
+
   return res.json({
       success,
       lastEdit: scriptName, 
       code, 
-      output
+      output,
+      meta: {
+        time: duration + ' ms',
+        timestamp: new Date().toISOString()
+      }  
     });
   });
 
