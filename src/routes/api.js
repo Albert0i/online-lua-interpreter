@@ -186,16 +186,24 @@ router.post('/eval', async (req, res) => {
   });
 
 router.get('/runtime', async (req, res) => {
-    const docURL = `https://dev.fandom.com/wiki/Lua_reference_manual/Standard_libraries#xpcall`
-
     const output = await redis.eval(inspectorScript); // Your interpreter logic
     res.json(output);
   });
 
   // https://dev.fandom.com/wiki/Lua_reference_manual/Standard_libraries#pairs
   // https://dev.fandom.com/wiki/Lua_reference_manual/Standard_libraries#table.insert
+
+  // https://redis.io/docs/latest/develop/programmability/lua-api/#:~:text=redis.setresp
+  // https://redis.io/docs/latest/develop/programmability/lua-api/#:~:text=redis.setresp
+/*
+{ "redis", "struct", "cjson", "cmsgpack", "bitop" }
+*/
+
   const inspectorScript = `
-      local refUrl = 'https://dev.fandom.com/wiki/Lua_reference_manual/Standard_libraries#'
+      local libs = { redis=true, struct=true, cjson=true, cmsgpack=true, bitop=true, bit=true }
+      local fandomUrl = 'https://dev.fandom.com/wiki/Lua_reference_manual/Standard_libraries#'
+      local redisUrl = 'https://redis.io/docs/latest/develop/programmability/lua-api/#:~:text='
+      local coroutineUrl = 'https://www.lua.org/manual/5.1/manual.html#5.2/#:~:text='
       local result = {}
 
       local function countTable(tbl)
@@ -206,8 +214,14 @@ router.get('/runtime', async (req, res) => {
         return count
       end
 
-      local function makeLink(keyword)
-        return "<a href='"..refUrl..keyword.."' target=_blank>"..keyword.."</a>"
+      local function makeLink(lib, keyword)
+        if lib == "coroutine" then 
+          return "<a href='"..coroutineUrl..keyword.."' target=_blank>"..keyword.."</a>"
+        elseif libs[lib] then 
+          return "<a href='"..redisUrl..keyword.."' target=_blank>"..keyword.."</a>"
+        else 
+          return "<a href='"..fandomUrl..keyword.."' target=_blank>"..keyword.."</a>"
+        end 
       end 
 
       -- string and number
@@ -224,7 +238,7 @@ router.get('/runtime', async (req, res) => {
       for k, v in pairs(_G) do
         local t = type(v)
         if t=="function" then 
-          table.insert(result, t.." "..makeLink(k)) 
+          table.insert(result, t.." "..makeLink('', k)) 
         end 
       end
 
@@ -237,7 +251,7 @@ router.get('/runtime', async (req, res) => {
           for k2, v2 in pairs(v) do 
             local t2 = type(v2)
             if t2 == "function" then 
-              table.insert(result, "\t"..t2.." "..makeLink(k.."."..k2)) 
+              table.insert(result, "\t"..t2.." "..makeLink(k, k.."."..k2)) 
             elseif t2 == "table" then 
               table.insert(result, "\t"..k2 .. " : " .. t2.." ["..countTable(v2).."]")
             elseif t2 == "string" then 
