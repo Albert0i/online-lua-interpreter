@@ -185,10 +185,17 @@ router.post('/eval', async (req, res) => {
     });
   });
 
-router.get('/viewer', async (req, res) => {
+router.get('/runtime', async (req, res) => {
     const docURL = `https://dev.fandom.com/wiki/Lua_reference_manual/Standard_libraries#xpcall`
 
-    const luaScript = `
+    const output = await redis.eval(inspectorScript); // Your interpreter logic
+    res.json(output);
+  });
+
+  // https://dev.fandom.com/wiki/Lua_reference_manual/Standard_libraries#pairs
+  // https://dev.fandom.com/wiki/Lua_reference_manual/Standard_libraries#table.insert
+  const inspectorScript = `
+      local refUrl = 'https://dev.fandom.com/wiki/Lua_reference_manual/Standard_libraries#'
       local result = {}
 
       local function countTable(tbl)
@@ -199,6 +206,10 @@ router.get('/viewer', async (req, res) => {
         return count
       end
 
+      local function makeLink(keyword)
+        return "<a href='"..refUrl..keyword.."' target=_blank>"..keyword.."</a>"
+      end 
+
       -- string and number
       for k, v in pairs(_G) do
         local t = type(v)
@@ -208,28 +219,31 @@ router.get('/viewer', async (req, res) => {
           table.insert(result, t.." "..k.." = "..tostring(v)) 
         end 
       end
+
       -- function
       for k, v in pairs(_G) do
         local t = type(v)
         if t=="function" then 
-          table.insert(result, t.." "..k) 
+          table.insert(result, t.." "..makeLink(k)) 
         end 
       end
+
       -- table
       for k, v in pairs(_G) do
         local t = type(v)
         if t=="table" then 
-          table.insert(result, k .. " : " .. t.." ["..countTable(v).."]")
+          table.insert(result, t .. " " .. k.." ["..countTable(v).."]")
+
           for k2, v2 in pairs(v) do 
             local t2 = type(v2)
             if t2 == "function" then 
-              table.insert(result, "\t"..t2.." "..k.."."..k2) 
+              table.insert(result, "\t"..t2.." "..makeLink(k.."."..k2)) 
             elseif t2 == "table" then 
               table.insert(result, "\t"..k2 .. " : " .. t2.." ["..countTable(v2).."]")
             elseif t2 == "string" then 
-              table.insert(result, "\t"..t2.." "..k2.." = '"..v2.."'") 
+              table.insert(result, "\t"..t2.." "..k.."."..k2.." = '"..v2.."'") 
             elseif t2 == "number" then 
-              table.insert(result, "\t"..t2.." "..k2.." = "..tostring(v2)) 
+              table.insert(result, "\t"..t2.." "..k.."."..k2.." = "..tostring(v2)) 
             else
               table.insert(result, "\ttype = "..t2..", key = "..k2..", value = "..tostring(v2)) 
             end 
@@ -237,9 +251,6 @@ router.get('/viewer', async (req, res) => {
         end 
       end
       return result
-    `;
-    const output = await redis.eval(luaScript); // Your interpreter logic
-    res.json(output);
-  });
+    `;  
 
 export default router;
