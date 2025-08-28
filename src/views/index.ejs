@@ -145,16 +145,16 @@
           <% if (meta.time) { %>
             Executed in <%= meta.time %><br>
             Timestamp: <%= new Date(new Date(meta.timestamp).getTime() + 8 * 3600000).toISOString().replace('T', ' ').slice(0, 19).replace(/-/g, '/') %>
-            <div>
+            <div class="mt-2">
               <button onclick="copyOutput()" class="px-3 py-1 bg-sky-600 hover:bg-sky-700 hover:font-bold text-white rounded-full text-xs w-28">
                 Copy Output
               </button>
-          </div>              
+          </div>
           <% } %>
         </div>
 
         <div class="mt-2">
-          <button onclick="toggleRuntimeInspector()" class="px-3 py-1 bg-cyan-700 hover:bg-cyan-800 hover:font-bold text-white rounded-full text-xs w-32">Runtime Inspector</button>
+          <button onclick="toggleRuntimeInspector()" class="px-3 py-1 bg-cyan-700 hover:bg-cyan-800 hover:font-bold text-white rounded-full text-xs w-40">Runtime Inspector</button>
           <div id="runtimeInspector" class="runtime-inspector hidden mt-2 p-2 border rounded bg-gray-100 font-mono text-sm">
           </div>
         </div>
@@ -408,6 +408,22 @@
     deleteCookie(COOKIE_SPLITTER_NAME)
     clearConsoleMeta()
   });    
+  const templateString = `--[[
+	Small script sets and retrieves a key atomically
+	Parameters: 
+		KEYS[1] = key to set, *foo" for example
+		ARGV[1] = value to set, "bar" for example
+]]
+-- Define the key and value
+local key = KEYS[1]
+local value = ARGV[1]
+
+-- Set the key
+redis.call("SET", key, value)
+
+-- Retrieve and return the value
+return redis.call("GET", key)
+`
 
   // Handle scriptName changed
   scriptNameInput.addEventListener('input', () => {
