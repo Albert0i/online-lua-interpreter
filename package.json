@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/index.js",
+    "start": "nodemon src/index.js",
+    "build:css": "postcss ./src/public/styles/styles.css -o ./src/public/styles/build.css --watch",
+    "dev": "concurrently \"npm:build:css\" \"npm:start\"",
     "load": "node src/loader.js",
     "imgload": "node src/imgloader.js"
   },
@@ -28,5 +30,14 @@
     "express": "^5.1.0",
     "markdown-it": "^14.1.0",
     "redis": "^5.8.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.17",
+    "autoprefixer": "^10.4.21",
+    "concurrently": "^9.2.1",
+    "postcss": "^8.5.6",
+    "postcss-cli": "^11.0.1",
+    "prettier": "^3.6.2",
+    "tailwindcss": "^4.1.17"
   }
 }
